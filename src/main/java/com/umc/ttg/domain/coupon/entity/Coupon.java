@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "coupon")
 public class Coupon extends Time {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

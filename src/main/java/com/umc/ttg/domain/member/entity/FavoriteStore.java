@@ -1,11 +1,9 @@
 package com.umc.ttg.domain.member.entity;
 
 import com.umc.ttg.domain.store.entity.Store;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+@Entity
 public class FavoriteStore {
 
     @Id // 식별자 관계
