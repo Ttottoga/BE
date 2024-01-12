@@ -4,7 +4,7 @@ import com.umc.ttg.domain.store.entity.Store;
 import jakarta.persistence.*;
 
 @Entity
-public class FavoriteStore {
+public class HeartStore {
 
     @Id // 식별자 관계
     @ManyToOne(fetch = FetchType.LAZY)
