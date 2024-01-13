@@ -21,6 +21,8 @@ public class Store extends Time {
 
     private String saleInfo;
 
+    private String placeInfo;
+
     private String sponInfo;
 
     private String serviceInfo;
@@ -31,6 +33,9 @@ public class Store extends Time {
 
     @Column(nullable = false)
     private int reviewCount;
+
+    @Column(nullable = false)
+    private int reviewSpan;
 
     @Column(nullable = false)
     private String address;
