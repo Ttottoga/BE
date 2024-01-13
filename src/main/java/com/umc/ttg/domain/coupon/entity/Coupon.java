@@ -9,23 +9,30 @@ import java.time.LocalDate;
 
 @Entity
 public class Coupon extends Time {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+
     @Column(nullable = false, length = 50)
     private String name;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String barcode;
+
     @Column(nullable = false, length = 100)
     private String content;
+
     @Column(nullable = false)
-    private LocalDate start_date;
+    private LocalDate startDate;
+
     @Column(nullable = false)
-    private LocalDate end_date;
+    private LocalDate endDate;
+
     @Column(nullable = false, length = 1)
     @ColumnDefault("n")
-    private byte[] status_yn;
+    private char statusYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

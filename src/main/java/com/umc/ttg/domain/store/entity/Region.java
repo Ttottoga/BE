@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 
 @Entity
 public class Region {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false, length = 10)
     private String name;
 
-    private Long upper_id;
+    private Long upperId;
+
 }

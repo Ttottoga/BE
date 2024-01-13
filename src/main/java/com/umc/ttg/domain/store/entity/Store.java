@@ -6,8 +6,9 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class Store extends Time {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -16,20 +17,20 @@ public class Store extends Time {
 
     private String image;
 
-    private String use_info;
+    private String useInfo;
 
-    private String sale_info;
+    private String saleInfo;
 
-    private String spon_info;
+    private String sponInfo;
 
-    private String service_info;
+    private String serviceInfo;
 
     @Column(nullable = false, length = 1)
     @ColumnDefault("n")
-    private byte[] hot_yn;
+    private char hotYn;
 
     @Column(nullable = false)
-    private int review_count;
+    private int reviewCount;
 
     @Column(nullable = false)
     private String address;

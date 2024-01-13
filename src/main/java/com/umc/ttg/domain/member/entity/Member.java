@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 
 @Entity
 public class Member extends Time {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -17,11 +18,12 @@ public class Member extends Time {
     private String nickname;
 
     @Column(length = 15)
-    private String phone_num;
+    private String phoneNum;
 
     @Column(nullable = false, length = 30)
     private String email;
 
     @Column(nullable = false)
-    private int benefit_count;
+    private int benefitCount;
+
 }

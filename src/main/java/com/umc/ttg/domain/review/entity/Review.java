@@ -9,20 +9,21 @@ import java.time.LocalDate;
 
 @Entity
 public class Review extends Time {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false)
-    private String review_link;
+    private String reviewLink;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
 
     @Column(nullable = false)
-    private LocalDate apply_date;
+    private LocalDate applyDate;
 
     private String reason;
 
@@ -33,4 +34,5 @@ public class Review extends Time {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
 }
