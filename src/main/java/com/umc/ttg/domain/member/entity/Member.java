@@ -17,6 +17,8 @@ public class Member extends Time {
     @Column(nullable = false, length = 20)
     private String nickname;
 
+    private String profileImage;
+
     @Column(length = 15)
     private String phoneNum;
 
