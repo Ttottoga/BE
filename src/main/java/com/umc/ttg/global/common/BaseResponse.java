@@ -11,14 +11,14 @@ public class BaseResponse<T> {
     private T result; // 응답에 데이터가 포함 안될 수도 있으므로 final 뺌
 
     // code, message, data 모두 넘겨주는 Response
-    public BaseResponse(int status, int code, String message, T data) {
+    public BaseResponse(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.result = data;
     }
 
     // code, message 만 넘겨주는 Response
-    public BaseResponse(int status, int code, String message) {
+    public BaseResponse(int code, String message) {
         this.code = code;
         this.message = message;
     }
