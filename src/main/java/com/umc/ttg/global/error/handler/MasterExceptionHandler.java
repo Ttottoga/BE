@@ -61,7 +61,7 @@ public class MasterExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ResponseCode errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode, null);
+        BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode);
         return super.handleExceptionInternal(
                 e,
                 body,
@@ -73,7 +73,7 @@ public class MasterExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ResponseCode errorCode,
                                                                 HttpHeaders headers, HttpStatus status, WebRequest request) {
-        BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode, null);
+        BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode);
         return super.handleExceptionInternal(
                 e,
                 body,

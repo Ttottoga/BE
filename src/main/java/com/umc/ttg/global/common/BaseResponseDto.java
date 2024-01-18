@@ -18,11 +18,11 @@ public class BaseResponseDto<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
-    public static <T> BaseResponseDto<T> onSuccess(T data) {
-        return new BaseResponseDto<>(true, "요청에 성공하였습니다.", "1000", data);
+    public static <T> BaseResponseDto<T> onSuccess(T data, ResponseCode code) {
+        return new BaseResponseDto<>(true, code.getCode(), code.getMessage(), data);
     }
 
-    public static <T> BaseResponseDto<T> onFailure(ResponseCode code, T data) {
-        return new BaseResponseDto<>(false, code.getCode(), code.getMessage(), data);
+    public static <T> BaseResponseDto<T> onFailure(ResponseCode code) {
+        return new BaseResponseDto<>(false, code.getCode(), code.getMessage(), null);
     }
 }
