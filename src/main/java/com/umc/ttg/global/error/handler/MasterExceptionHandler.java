@@ -1,7 +1,8 @@
-package com.umc.ttg.global.error;
+package com.umc.ttg.global.error.handler;
 
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
+import com.umc.ttg.global.error.GeneralException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
