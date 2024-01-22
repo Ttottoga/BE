@@ -40,7 +40,7 @@ public class Store extends Time {
     private String serviceInfo;
 
     @Column(nullable = false, length = 1)
-    @ColumnDefault("n")
+    @ColumnDefault("'n'")
     private char hotYn;
 
     @Column(nullable = false)

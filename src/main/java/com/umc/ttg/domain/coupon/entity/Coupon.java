@@ -31,7 +31,7 @@ public class Coupon extends Time {
     private LocalDate endDate;
 
     @Column(nullable = false, length = 1)
-    @ColumnDefault("n")
+    @ColumnDefault("'n'")
     private char statusYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
