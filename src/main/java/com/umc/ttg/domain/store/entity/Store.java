@@ -1,9 +1,18 @@
 package com.umc.ttg.domain.store.entity;
 
+import com.umc.ttg.domain.store.dto.CreateStoreRequest;
+import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Entity
 public class Store extends Time {
 
@@ -50,5 +59,20 @@ public class Store extends Time {
     @OneToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    @Builder
+    public Store(CreateStoreRequest createStoreRequest, Menu menu, Region region) {
+        this.title = createStoreRequest.getTitle();
+        this.subTitle = createStoreRequest.getSubTitle();
+        this.image = StoreConverter.toS3ImageLink(createStoreRequest.getStoreImage());
+        this.useInfo = createStoreRequest.getUseInfo();
+        this.saleInfo = createStoreRequest.getSaleInfo();
+        this.placeInfo = createStoreRequest.getPlaceInfo();
+        this.sponInfo = createStoreRequest.getSponInfo();
+        this.serviceInfo = createStoreRequest.getServiceInfo();
+        this.address = createStoreRequest.getAddress();
+        this.menu = menu;
+        this.region = region;
+    }
 
 }

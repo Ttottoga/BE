@@ -1,7 +1,9 @@
 package com.umc.ttg.domain.store.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class Menu {
 
