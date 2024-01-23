@@ -73,12 +73,4 @@ public class Store extends Time {
 
     }
 
-    public Store setMenuAndRegion(Menu menu, Region region) {
-
-        this.menu = menu;
-        this.region = region;
-
-        return this;
-    }
-
 }
