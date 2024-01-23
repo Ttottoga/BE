@@ -1,15 +1,11 @@
 package com.umc.ttg.domain.store.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class CreateStoreRequest {
 
     private String title;
@@ -18,7 +14,7 @@ public class CreateStoreRequest {
     private Long menu;
     private MultipartFile storeImage;
     private String serviceInfo;
-    private int reviewTerm;
+    private int reviewSpan;
     private String useInfo;
     private String saleInfo;
     private String sponInfo;
