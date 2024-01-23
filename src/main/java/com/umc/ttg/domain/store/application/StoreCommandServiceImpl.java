@@ -1,6 +1,6 @@
 package com.umc.ttg.domain.store.application;
 
-import com.umc.ttg.domain.store.application.handler.StoreHandler;
+import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.dto.CreateStoreResponse;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Menu;
@@ -14,8 +14,6 @@ import com.umc.ttg.global.common.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service

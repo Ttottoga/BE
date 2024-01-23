@@ -1,4 +1,4 @@
-package com.umc.ttg.domain.store.application.handler;
+package com.umc.ttg.domain.store.exception.handler;
 
 import com.umc.ttg.global.common.ResponseCode;
 import com.umc.ttg.global.error.GeneralException;
