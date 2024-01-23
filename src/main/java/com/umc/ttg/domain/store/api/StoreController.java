@@ -5,11 +5,10 @@ import com.umc.ttg.domain.store.dto.CreateStoreRequest;
 import com.umc.ttg.domain.store.dto.CreateStoreResponse;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.global.common.BaseResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class StoreController {
     private final StoreCommandService storeCommandService;
 
     @PostMapping
-    public BaseResponseDto<CreateStoreResponse> create(@ModelAttribute CreateStoreRequest createStoreRequest) {
+    public BaseResponseDto<CreateStoreResponse> create(@ModelAttribute @Valid CreateStoreRequest createStoreRequest) {
 
         Store store = new Store(createStoreRequest);
 
