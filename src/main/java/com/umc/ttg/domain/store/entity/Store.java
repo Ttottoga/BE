@@ -1,6 +1,6 @@
 package com.umc.ttg.domain.store.entity;
 
-import com.umc.ttg.domain.store.dto.CreateStoreRequest;
+import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
@@ -58,18 +58,18 @@ public class Store extends Time {
     private Menu menu;
 
     @Builder
-    public Store(CreateStoreRequest createStoreRequest) {
+    public Store(StoreCreateRequestDto storeCreateRequestDto) {
 
-        this.title = createStoreRequest.getTitle();
-        this.subTitle = createStoreRequest.getSubTitle();
-        this.image = StoreConverter.toS3ImageLink(createStoreRequest.getStoreImage());
-        this.useInfo = createStoreRequest.getUseInfo();
-        this.saleInfo = createStoreRequest.getSaleInfo();
-        this.placeInfo = createStoreRequest.getPlaceInfo();
-        this.sponInfo = createStoreRequest.getSponInfo();
-        this.serviceInfo = createStoreRequest.getServiceInfo();
-        this.reviewSpan = createStoreRequest.getReviewSpan();
-        this.address = createStoreRequest.getAddress();
+        this.title = storeCreateRequestDto.getTitle();
+        this.subTitle = storeCreateRequestDto.getSubTitle();
+        this.image = StoreConverter.convertToS3ImageLink(storeCreateRequestDto.getStoreImage());
+        this.useInfo = storeCreateRequestDto.getUseInfo();
+        this.saleInfo = storeCreateRequestDto.getSaleInfo();
+        this.placeInfo = storeCreateRequestDto.getPlaceInfo();
+        this.sponInfo = storeCreateRequestDto.getSponInfo();
+        this.serviceInfo = storeCreateRequestDto.getServiceInfo();
+        this.reviewSpan = storeCreateRequestDto.getReviewSpan();
+        this.address = storeCreateRequestDto.getAddress();
 
     }
 

@@ -1,7 +1,7 @@
 package com.umc.ttg.domain.store.application;
 
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
-import com.umc.ttg.domain.store.dto.CreateStoreResponse;
+import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Menu;
 import com.umc.ttg.domain.store.entity.Region;
@@ -25,7 +25,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final RegionRepository regionRepository;
 
     @Override
-    public BaseResponseDto<CreateStoreResponse> save(Store store, Long menuId, Long regionId) {
+    public BaseResponseDto<StoreCreateResponseDto> save(Store store, Long menuId, Long regionId) {
 
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
@@ -38,7 +38,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         Store savedStore = storeRepository.save(store);
 
-        return BaseResponseDto.onSuccess(StoreConverter.toCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(StoreConverter.convertToCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
 
     }
 
