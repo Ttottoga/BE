@@ -1,5 +1,6 @@
 package com.umc.ttg.domain.store.application;
 
+import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
@@ -25,12 +26,14 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final RegionRepository regionRepository;
 
     @Override
-    public BaseResponseDto<StoreCreateResponseDto> save(Store store, Long menuId, Long regionId) {
+    public BaseResponseDto<StoreCreateResponseDto> save(StoreCreateRequestDto storeCreateRequestDto) {
 
-        Menu menu = menuRepository.findById(menuId)
+        Store store = new Store(storeCreateRequestDto);
+
+        Menu menu = menuRepository.findById(storeCreateRequestDto.getMenu())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        Region region = regionRepository.findById(regionId)
+        Region region = regionRepository.findById(storeCreateRequestDto.getRegion())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         store.setMenu(menu);

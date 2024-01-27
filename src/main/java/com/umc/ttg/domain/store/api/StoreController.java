@@ -21,9 +21,8 @@ public class StoreController {
     @PostMapping
     public BaseResponseDto<StoreCreateResponseDto> create(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) {
 
-        Store store = new Store(storeCreateRequestDto);
 
-        return storeCommandService.save(store, storeCreateRequestDto.getMenu(), storeCreateRequestDto.getRegion());
+        return storeCommandService.save(storeCreateRequestDto);
     }
 
 }
