@@ -5,8 +5,12 @@ import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.time.LocalDate;
 
+@DynamicInsert @DynamicUpdate
 @Entity
 public class Coupon extends Time {
 
@@ -32,7 +36,7 @@ public class Coupon extends Time {
 
     @Column(nullable = false, length = 1)
     @ColumnDefault("'n'")
-    private char statusYn;
+    private Character statusYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)

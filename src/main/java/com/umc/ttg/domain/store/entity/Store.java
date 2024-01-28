@@ -6,9 +6,12 @@ import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicInsert @DynamicUpdate
 @Getter @Setter
 @Entity
 public class Store extends Time {
@@ -38,7 +41,7 @@ public class Store extends Time {
 
     @Column(nullable = false, length = 1)
     @ColumnDefault("'n'")
-    private char hotYn;
+    private Character hotYn;
 
     @Column(nullable = false)
     private int reviewCount;
