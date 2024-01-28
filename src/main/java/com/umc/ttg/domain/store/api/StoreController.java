@@ -3,6 +3,7 @@ package com.umc.ttg.domain.store.api;
 import com.umc.ttg.domain.store.application.StoreCommandService;
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
+import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
@@ -21,8 +22,15 @@ public class StoreController {
     @PostMapping
     public BaseResponseDto<StoreCreateResponseDto> create(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) {
 
-
         return storeCommandService.save(storeCreateRequestDto);
+
+    }
+
+    @GetMapping("/{store-id}")
+    public BaseResponseDto<StoreFindResponseDto> findStore(@PathVariable("store-id") Long storeId) {
+
+        return storeCommandService.find(storeId);
+
     }
 
 }

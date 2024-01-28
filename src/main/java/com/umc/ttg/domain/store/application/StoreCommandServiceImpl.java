@@ -1,6 +1,7 @@
 package com.umc.ttg.domain.store.application;
 
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
+import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
@@ -42,6 +43,16 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Store savedStore = storeRepository.save(store);
 
         return BaseResponseDto.onSuccess(StoreConverter.convertToCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
+
+    }
+
+    @Override
+    public BaseResponseDto<StoreFindResponseDto> find(Long storeId) {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store), ResponseCode.OK);
 
     }
 
