@@ -4,10 +4,12 @@ import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
 public class Review extends Time {
 
     @Id
