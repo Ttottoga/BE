@@ -1,5 +1,6 @@
 package com.umc.ttg.domain.store.entity;
 
+import com.umc.ttg.domain.member.entity.HeartStore;
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.global.util.Time;
@@ -8,6 +9,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +23,9 @@ public class Store extends Time {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -59,6 +65,9 @@ public class Store extends Time {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<HeartStore> heartStores;
 
     @Builder
     public Store(StoreCreateRequestDto storeCreateRequestDto) {
