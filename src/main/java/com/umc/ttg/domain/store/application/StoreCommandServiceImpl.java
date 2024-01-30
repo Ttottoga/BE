@@ -27,7 +27,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final RegionRepository regionRepository;
 
     @Override
-    public BaseResponseDto<StoreCreateResponseDto> save(StoreCreateRequestDto storeCreateRequestDto) {
+    public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) {
 
         Store store = new Store(storeCreateRequestDto);
 
@@ -47,7 +47,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     }
 
     @Override
-    public BaseResponseDto<StoreFindResponseDto> find(Long storeId) {
+    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId) {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
