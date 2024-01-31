@@ -1,6 +1,5 @@
 package com.umc.ttg.domain.store.dto;
 
-import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Store;
@@ -70,8 +69,8 @@ public class HomeResponseDto {
         public HomeReviews(Review review) {
             this.reviewId = review.getId();
             this.reviewImage = StoreConverter.convertToReviewImage(review);
-            this.profileImage = StoreConverter.convertToProfileImage(review);
-            this.nickname = StoreConverter.convertToNickname(review);
+            this.profileImage = StoreConverter.convertToReviewProfileImage(review);
+            this.nickname = StoreConverter.convertToReviewNickname(review);
             this.reviewTitle = StoreConverter.convertToReviewTitle(review);
             this.storeName = review.getStore().getName();
             this.reviewLink = review.getReviewLink();

@@ -2,11 +2,6 @@ package com.umc.ttg.domain.store.dto.converter;
 
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
-import com.umc.ttg.domain.store.entity.Store;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 public class StoreConverter {
@@ -18,27 +13,37 @@ public class StoreConverter {
 
     // Store 정보 -> CreateStoreResponse 로
     public static StoreCreateResponseDto convertToCreateStoreResponse(Long storeId) {
+
         return new StoreCreateResponseDto(storeId);
+
     }
 
-    // Review Link -> review Image
+    // 리뷰 썸네일 -> 상점 이미지
     public static String convertToReviewImage(Review review) {
-        return "리뷰 테스트";
+
+        return review.getStore().getImage();
+
     }
 
-    // Review Link -> review profileImage
-    public static String convertToProfileImage(Review review) {
-        return "리뷰 프로필 테스트";
+    // 리뷰 작성자 이미지 -> Member 프로필 이미지
+    public static String convertToReviewProfileImage(Review review) {
+
+        return review.getMember().getProfileImage();
+
     }
 
-    // Review Link -> review nickname
-    public static String convertToNickname(Review review) {
-        return "리뷰 닉네임";
+    // 리뷰 작성자 -> Member 닉네임
+    public static String convertToReviewNickname(Review review) {
+
+        return review.getMember().getNickname();
+
     }
 
-    // Review Link -> reviewTitle
+    // 리뷰 타이틀 -> {Member 닉네임}'님의 닉네임'
     public static String convertToReviewTitle(Review review) {
-        return "리뷰 타이틀";
+
+        return review.getMember().getNickname() + " 님의 닉네임";
+
     }
 
 }

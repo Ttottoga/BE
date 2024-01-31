@@ -2,7 +2,9 @@ package com.umc.ttg.domain.member.entity;
 
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Member extends Time {
 
