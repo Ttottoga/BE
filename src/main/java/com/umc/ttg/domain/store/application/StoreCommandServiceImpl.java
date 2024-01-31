@@ -5,6 +5,7 @@ import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.dto.HomeResponseDto;
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
+import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
@@ -37,7 +38,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public BaseResponseDto<StoreCreateResponseDto> save(StoreCreateRequestDto storeCreateRequestDto) {
+    public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) {
 
         Store store = new Store(storeCreateRequestDto);
 
@@ -53,6 +54,16 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Store savedStore = storeRepository.save(store);
 
         return BaseResponseDto.onSuccess(StoreConverter.convertToCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
+
+    }
+
+    @Override
+    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId) {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store), ResponseCode.OK);
 
     }
 
