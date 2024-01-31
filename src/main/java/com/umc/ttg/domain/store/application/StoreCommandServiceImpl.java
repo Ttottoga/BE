@@ -88,11 +88,10 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         Collections.shuffle(reviews);
 
-        List<HomeResponseDto.HomeReviews> homeReviews = reviews.stream()
+        return reviews.stream()
                 .limit(5)
                 .map(HomeResponseDto.HomeReviews::new)
                 .collect(Collectors.toList());
-        return homeReviews;
 
     }
 
@@ -104,10 +103,8 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         Collections.shuffle(hotStores);
 
-        List<HomeResponseDto.HotStore> hotStore = hotStores.stream()
+        return hotStores.stream()
                 .limit(5).collect(Collectors.toList());
-
-        return hotStore;
 
     }
 
@@ -123,6 +120,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
                         top15.add(store.getHeartStores().contains(member) ?
                                 new HomeResponseDto.Top15(store, true) :
                                 new HomeResponseDto.Top15(store, false)));
+
         return top15;
 
     }

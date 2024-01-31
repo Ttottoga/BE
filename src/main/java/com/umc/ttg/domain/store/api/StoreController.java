@@ -30,6 +30,10 @@ public class StoreController {
     @GetMapping("/home")
     public BaseResponseDto<HomeResponseDto> home() {
 
+        /**
+         * 여기에 토큰으로부터 Member 빼오는 작업
+         */
+
         // Test Member 객체
         Member testMember = new Member();
 
