@@ -2,8 +2,13 @@ package com.umc.ttg.domain.member.entity;
 
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Time {
 
     @Id
