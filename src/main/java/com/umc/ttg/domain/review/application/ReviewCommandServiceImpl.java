@@ -32,7 +32,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     public BaseResponseDto<ReviewRegisterResponseDTO> save(Long storeId, ReviewRegisterRequestDTO reviewRegisterRequestDTO) {
 
         // 로그인 구현되면 시큐리티에서 member 가져올 예정
-        Long memberId = 2L;
+        Long memberId = 1L;
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
