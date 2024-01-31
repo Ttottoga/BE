@@ -41,7 +41,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Review review = new Review(store, member, reviewRegisterRequestDTO);
-        review.setStatus(ReviewStatus.SUBSCRIPTION);
+        review.setStatus(ReviewStatus.SUCCESS);
         review.setApplyDate(LocalDate.now());
 
         // DB에 저장
