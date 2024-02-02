@@ -64,7 +64,8 @@ public class StoreConverter {
                 .placeInfo(store.getPlaceInfo())
                 .address(store.getAddress())
                 .sponInfo(store.getSponInfo())
-                .reviewCount(store.getReviewCount()).build();
+                .reviewCount(store.getReviewCount())
+                .name(store.getName()).build();
     }
 
 }
