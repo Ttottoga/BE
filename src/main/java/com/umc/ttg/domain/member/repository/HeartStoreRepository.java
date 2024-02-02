@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface HeartStoreRepository extends JpaRepository<HeartStore, Long> {
 
-    Optional<Store> findByMemberAndStore(Member member, Store store);
+    Optional<HeartStore> findByMemberAndStore(Member member, Store store);
 
 }
