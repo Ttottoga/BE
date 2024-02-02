@@ -106,7 +106,11 @@ public class StoreCommandServiceImpl implements StoreCommandService {
                         .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(), store.getImage(), store.getServiceInfo(), store.getReviewCount(), heartStoreRepository.findByMemberAndStore(member, store).isPresent()))
                         .toList();
 
-        return new PageImpl<>(stores, pageable, stores.size());
+        // 다음 페이지 요청 시, offset 정보 활용하여 데이터 선별하여 전달
+        int start = Math.toIntExact(pageable.getOffset());
+        int end = Math.min((start + pageable.getPageSize()), stores.size());
+
+        return new PageImpl<>(stores.subList(start, end), pageable, stores.size());
 
     }
 
