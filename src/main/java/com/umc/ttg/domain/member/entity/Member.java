@@ -3,11 +3,13 @@ package com.umc.ttg.domain.member.entity;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Time {
 
@@ -33,7 +35,13 @@ public class Member extends Time {
     @Column(nullable = false)
     private int benefitCount;
 
-    // 토큰 받아오기 전까지 필요한 기본 생성자
-    public Member(){};
-
+    @Builder
+    public Member(String name, String nickname, String profileImage, String phoneNum, String email, int benefitCount) {
+        this.name = name;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.phoneNum = phoneNum;
+        this.email = email;
+        this.benefitCount = benefitCount;
+    }
 }

@@ -66,9 +66,6 @@ public class Store extends Time {
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<HeartStore> heartStores;
-
     @Builder
     public Store(StoreCreateRequestDto storeCreateRequestDto) {
 

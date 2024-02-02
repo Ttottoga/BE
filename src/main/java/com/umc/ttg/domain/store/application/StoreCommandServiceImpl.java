@@ -1,6 +1,7 @@
 package com.umc.ttg.domain.store.application;
 
 import com.umc.ttg.domain.member.entity.Member;
+import com.umc.ttg.domain.member.repository.HeartStoreRepository;
 import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
@@ -38,6 +39,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final RegionRepository regionRepository;
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
+    private final HeartStoreRepository heartStoreRepository;
 
     @Override
     public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) {
@@ -72,7 +74,12 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<HomeResponseDto> getHome(Long memberId) {
 
-        Member member = memberRepository.findById(memberId)
+        /**
+         * testMember
+         */
+        Long testMemberId = saveTestMember().getId();
+
+        Member member = memberRepository.findById(testMemberId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         // top 15
@@ -131,12 +138,21 @@ public class StoreCommandServiceImpl implements StoreCommandService {
                 .stream().limit(15).toList();
 
         topStores.forEach(store ->
-                        top15.add(store.getHeartStores().contains(member) ?
-                                new HomeResponseDto.Top15(store, true) :
-                                new HomeResponseDto.Top15(store, false)));
+                top15.add(new HomeResponseDto.Top15(store, heartStoreRepository.findByMemberAndStore(member, store).isPresent())));
 
         return top15;
 
+    }
+
+    private Member saveTestMember() {
+        return memberRepository.save(Member.builder()
+                .name("test")
+                .nickname("ddd")
+                .email("test@gmail.com")
+                .phoneNum("010")
+                .profileImage("testImage")
+                .benefitCount(0)
+                .build());
     }
 
 }
