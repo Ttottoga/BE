@@ -25,7 +25,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public BaseResponseDto<MyPageAllResponseDto> lookUp() {
+    public BaseResponseDto<MyPageAllResponseDto> myPageLookUp() {
 
         /**
          * 추후에 token을 통해 Member 정보를 가져올 예정

@@ -17,6 +17,6 @@ public class MemberController {
     @GetMapping
     public BaseResponseDto<MyPageAllResponseDto> getMyPage() {
 
-        return memberService.lookUp();
+        return memberService.myPageLookUp();
     }
 }
