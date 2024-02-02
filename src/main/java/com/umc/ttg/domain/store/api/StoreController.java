@@ -39,13 +39,13 @@ public class StoreController {
     public BaseResponseDto<HomeResponseDto> home() {
 
         /**
-         * 여기에 토큰으로부터 Member 빼오는 작업
+         * 여기에 토큰으로부터 MemberId 로직 들어갈 것
          */
 
-        // Test Member 객체
-        Member testMember = new Member();
+        // Test MemberId
+        Long testMemberId = 1L;
 
-        BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMember);
+        BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMemberId);
 
         return home;
 

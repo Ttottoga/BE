@@ -13,6 +13,6 @@ public interface StoreCommandService {
 
     BaseResponseDto<StoreFindResponseDto> findStore(Long storeId);
 
-    BaseResponseDto<HomeResponseDto> getHome(Member member);
+    BaseResponseDto<HomeResponseDto> getHome(Long memberId);
 
 }

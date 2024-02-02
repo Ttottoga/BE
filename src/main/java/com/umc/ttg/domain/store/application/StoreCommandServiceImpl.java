@@ -1,6 +1,7 @@
 package com.umc.ttg.domain.store.application;
 
 import com.umc.ttg.domain.member.entity.Member;
+import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.dto.HomeResponseDto;
@@ -36,6 +37,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final MenuRepository menuRepository;
     private final RegionRepository regionRepository;
     private final ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) {
@@ -68,7 +70,10 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     }
 
     @Override
-    public BaseResponseDto<HomeResponseDto> getHome(Member member) {
+    public BaseResponseDto<HomeResponseDto> getHome(Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         // top 15
         List<HomeResponseDto.Top15> top15 = getTop15(member);
