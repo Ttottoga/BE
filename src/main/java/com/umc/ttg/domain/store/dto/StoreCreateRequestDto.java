@@ -15,6 +15,9 @@ public class StoreCreateRequestDto {
     private String title;
 
     @NotNull @NotEmpty @NotBlank
+    private String name;
+
+    @NotNull @NotEmpty @NotBlank
     private String subTitle;
 
     @NotNull
