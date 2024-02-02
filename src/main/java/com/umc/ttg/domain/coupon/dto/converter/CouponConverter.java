@@ -10,10 +10,9 @@ public class CouponConverter {
             return null;
         }
 
-        MyPageCouponResponseDTO couponResponseDTO = new MyPageCouponResponseDTO();
-        couponResponseDTO.setId(coupon.getId());
-        couponResponseDTO.setContent(coupon.getContent());
-
-        return couponResponseDTO;
+        return MyPageCouponResponseDTO.builder()
+                .id(coupon.getId())
+                .content(coupon.getContent())
+                .build();
     }
 }

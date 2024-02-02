@@ -7,12 +7,10 @@ public class MemberConverter {
 
     public static MyPageMemberResponseDTO convertToMyMemberDto(Member member){
 
-        MyPageMemberResponseDTO memberResponseDTO = new MyPageMemberResponseDTO();
-
-        memberResponseDTO.setMemberId(member.getId());
-        memberResponseDTO.setNickname(member.getNickname());
-        memberResponseDTO.setBenefitCount(member.getBenefitCount());
-
-        return memberResponseDTO;
+        return MyPageMemberResponseDTO.builder()
+                .memberId(member.getId())
+                .nickname(member.getNickname())
+                .benefitCount(member.getBenefitCount())
+                .build();
     }
 }

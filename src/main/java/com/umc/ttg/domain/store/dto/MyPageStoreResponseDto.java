@@ -2,10 +2,11 @@ package com.umc.ttg.domain.store.dto;
 
 import com.umc.ttg.domain.coupon.dto.MyPageCouponResponseDTO;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyPageStoreResponseDto {

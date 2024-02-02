@@ -51,11 +51,11 @@ public class StoreConverter {
             return null;
         }
 
-        // 로직이 복잡해져서 익숙한 코드로 작성하고 문제 없으면 builder 이용하겠습니다
-        MyPageStoreResponseDto storeResponseDto = new MyPageStoreResponseDto();
-        storeResponseDto.setStoreId(store.getId());
-        storeResponseDto.setTitle(store.getTitle());
-        storeResponseDto.setImage(store.getImage());
+        MyPageStoreResponseDto storeResponseDto = MyPageStoreResponseDto.builder()
+                .storeId(store.getId())
+                .title(store.getTitle())
+                .image(store.getImage())
+                .build();
 
         // Coupon 정보 설정
         Optional<Coupon> optionalCoupon = couponRepository.findByStoreId(store.getId());
