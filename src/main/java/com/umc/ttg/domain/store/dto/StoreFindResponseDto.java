@@ -13,6 +13,7 @@ public class StoreFindResponseDto {
 
     private String storeImage;
     private String title;
+    private String name;
     private String subTitle;
     private String regionName;
     private String menuName;

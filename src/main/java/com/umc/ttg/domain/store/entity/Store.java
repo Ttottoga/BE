@@ -22,6 +22,9 @@ public class Store extends Time {
     private Long id;
 
     @Column(nullable = false, length = 50)
+    private String name;
+
+    @Column(nullable = false, length = 50)
     private String title;
 
     @Column(nullable = false, length = 100)
@@ -73,6 +76,7 @@ public class Store extends Time {
         this.serviceInfo = storeCreateRequestDto.getServiceInfo();
         this.reviewSpan = storeCreateRequestDto.getReviewSpan();
         this.address = storeCreateRequestDto.getAddress();
+        this.name = storeCreateRequestDto.getName();
 
     }
 
