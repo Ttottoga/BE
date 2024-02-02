@@ -20,9 +20,6 @@ public class StoreCreateRequestDto {
     @NotNull @NotEmpty @NotBlank
     private String subTitle;
 
-    @NotNull @NotEmpty @NotBlank
-    private String name;
-
     @NotNull
     private Long region;
 
