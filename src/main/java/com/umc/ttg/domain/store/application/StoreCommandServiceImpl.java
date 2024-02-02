@@ -78,7 +78,9 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Long testMemberId = saveTestMember().getId();
+
+        Member member = memberRepository.findById(testMemberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -105,6 +107,19 @@ public class StoreCommandServiceImpl implements StoreCommandService {
                         .toList();
 
         return new PageImpl<>(stores, pageable, stores.size());
+
+    }
+
+    private Member saveTestMember() {
+
+        return memberRepository.save(Member.builder()
+                .name("test")
+                .nickname("ddd")
+                .email("test@gmail.com")
+                .profileImage("ddd")
+                .phoneNum("010")
+                .benefitCount(0)
+                .build());
 
     }
 
