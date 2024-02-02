@@ -1,12 +1,10 @@
 package com.umc.ttg.domain.review.dto;
 
-import com.umc.ttg.domain.coupon.dto.MyPageCouponResponseDTO;
 import com.umc.ttg.domain.coupon.repository.CouponRepository;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.entity.ReviewStatus;
 import com.umc.ttg.domain.store.dto.MyPageStoreResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
-import com.umc.ttg.domain.store.entity.Store;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

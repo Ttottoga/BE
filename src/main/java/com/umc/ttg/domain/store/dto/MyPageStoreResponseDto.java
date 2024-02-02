@@ -1,6 +1,5 @@
 package com.umc.ttg.domain.store.dto;
 
-import com.umc.ttg.domain.coupon.dto.CouponResponseDto;
 import com.umc.ttg.domain.coupon.dto.MyPageCouponResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
