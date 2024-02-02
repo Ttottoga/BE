@@ -43,7 +43,7 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region-categories")
-    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(@RequestParam Long regionId,
+    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
                                                                                  @RequestParam int page,
                                                                                  @RequestParam int size) {
 
@@ -52,7 +52,7 @@ public class StoreController {
          */
         Long memberId = 1L;
 
-        return storeCommandService.findStoreByRegion(regionId, page, size, memberId);
+        return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
 
     }
 
