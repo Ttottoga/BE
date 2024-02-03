@@ -71,7 +71,6 @@ public class Store extends Time {
 
         this.title = storeCreateRequestDto.getTitle();
         this.subTitle = storeCreateRequestDto.getSubTitle();
-        this.image = StoreConverter.convertToS3ImageLink(storeCreateRequestDto.getStoreImage());
         this.useInfo = storeCreateRequestDto.getUseInfo();
         this.saleInfo = storeCreateRequestDto.getSaleInfo();
         this.placeInfo = storeCreateRequestDto.getPlaceInfo();

@@ -4,14 +4,8 @@ import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
-import org.springframework.web.multipart.MultipartFile;
 
 public class StoreConverter {
-
-    // MultiPartFile -> S3 링크로
-    public static String convertToS3ImageLink(MultipartFile multipartFile) {
-        return "이미지 링크";
-    }
 
     // Store 정보 -> StoreCreateResponseDto 로
     public static StoreCreateResponseDto convertToCreateStoreResponse(Long storeId) {
