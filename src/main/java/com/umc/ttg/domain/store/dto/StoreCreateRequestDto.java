@@ -15,10 +15,10 @@ public class StoreCreateRequestDto {
     private String title;
 
     @NotNull @NotEmpty @NotBlank
-    private String subTitle;
+    private String name;
 
     @NotNull @NotEmpty @NotBlank
-    private String name;
+    private String subTitle;
 
     @NotNull
     private Long region;

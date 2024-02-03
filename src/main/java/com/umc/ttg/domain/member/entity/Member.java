@@ -3,12 +3,14 @@ package com.umc.ttg.domain.member.entity;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Time {
 
     @Id
@@ -33,4 +35,13 @@ public class Member extends Time {
     @Column(nullable = false)
     private int benefitCount;
 
+    @Builder
+    public Member(String name, String nickname, String profileImage, String phoneNum, String email, int benefitCount) {
+        this.name = name;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.phoneNum = phoneNum;
+        this.email = email;
+        this.benefitCount = benefitCount;
+    }
 }
