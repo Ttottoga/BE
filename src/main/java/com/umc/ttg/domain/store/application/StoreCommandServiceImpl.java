@@ -46,7 +46,6 @@ import java.util.Comparator;
 public class StoreCommandServiceImpl implements StoreCommandService {
 
     private final AwsS3Service awsS3Service;
-
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
     private final RegionRepository regionRepository;
@@ -57,17 +56,17 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
-        Store store = new Store(storeCreateRequestDto);
-
         Menu menu = menuRepository.findById(storeCreateRequestDto.getMenu())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Region region = regionRepository.findById(storeCreateRequestDto.getRegion())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        store.setMenu(menu);
-        store.setRegion(region);
-        store.setImage(getS3ImageLink(storeCreateRequestDto.getStoreImage()));
+        Store store = Store.builder()
+                .storeCreateRequestDto(storeCreateRequestDto)
+                .menu(menu)
+                .region(region)
+                .storeImage(getS3ImageLink(storeCreateRequestDto.getStoreImage())).build();
 
         Store savedStore = storeRepository.save(store);
 
@@ -94,10 +93,8 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     }
 
     /**
-     *
      * HOT 상점 먼저 랜덤으로 배치 후, 다음은 베스트(또또가 누적 리뷰 순)순으로 배치
      * 한 번의 요청마다 20개씩 넘겨줌(무한 스크롤 방식)
-     *
      */
     @Override
     public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
@@ -158,7 +155,6 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         // reviews - 랜덤으로
         List<HomeResponseDto.HomeReviews> homeReview = getHomeReview();
 
-
         // ResponseDTO
         HomeResponseDto homeResponseDto = HomeResponseDto.builder()
                 .top15(top15)
@@ -210,8 +206,6 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         return top15;
 
     }
-
-
 
     private Member saveTestMember() {
 
