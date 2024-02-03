@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.umc.ttg.global.common.AwsS3;
+import com.umc.ttg.global.common.ResponseCode;
+import com.umc.ttg.global.error.handler.AwsS3Handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class AwsS3Service {
 
     public AwsS3 upload(MultipartFile multipartFile, String directoryName) throws IOException {
         File file = convertMultipartFileToFile(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File convert fail"));
+                .orElseThrow(() -> new AwsS3Handler(ResponseCode.S3_UPLOAD_FAIL));
 
         return upload(file, directoryName);
     }
