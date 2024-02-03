@@ -1,6 +1,5 @@
 package com.umc.ttg.domain.store.api;
 
-import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.store.application.StoreCommandService;
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/stores")
@@ -24,7 +25,7 @@ public class StoreController {
     private final StoreCommandService storeCommandService;
 
     @PostMapping
-    public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) {
+    public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
         return storeCommandService.saveStore(storeCreateRequestDto);
 

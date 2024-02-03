@@ -15,8 +15,10 @@ import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.domain.store.repository.MenuRepository;
 import com.umc.ttg.domain.store.repository.RegionRepository;
 import com.umc.ttg.domain.store.repository.StoreRepository;
+import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
+import com.umc.ttg.global.util.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +38,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreCommandServiceImpl implements StoreCommandService {
 
+    private final AwsS3Service awsS3Service;
+
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
     private final RegionRepository regionRepository;
@@ -40,7 +47,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final MemberRepository memberRepository;
 
     @Override
-    public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) {
+    public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
         Store store = new Store(storeCreateRequestDto);
 
@@ -52,10 +59,19 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         store.setMenu(menu);
         store.setRegion(region);
+        store.setImage(getS3ImageLink(storeCreateRequestDto.getStoreImage()));
 
         Store savedStore = storeRepository.save(store);
 
         return BaseResponseDto.onSuccess(StoreConverter.convertToCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
+
+    }
+
+    private String getS3ImageLink(MultipartFile multipartFile) throws IOException {
+
+        AwsS3 storeImage = awsS3Service.upload(multipartFile, "storeImage");
+
+        return storeImage.getPath();
 
     }
 

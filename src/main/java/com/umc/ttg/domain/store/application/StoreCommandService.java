@@ -7,9 +7,11 @@ import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.global.common.BaseResponseDto;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
+
 public interface StoreCommandService {
 
-    BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto);
+    BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException;
 
     BaseResponseDto<StoreFindResponseDto> findStore(Long storeId);
 
