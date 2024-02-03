@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 public class HeartStore {
 
-    @Id // 식별자 관계
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
