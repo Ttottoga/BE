@@ -1,5 +1,11 @@
 package com.umc.ttg.domain.review.application;
 
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.umc.ttg.domain.coupon.entity.Coupon;
+import com.umc.ttg.domain.coupon.repository.CouponRepository;
+import com.umc.ttg.domain.coupon.utils.BitMatrixToMultipartFileConverter;
+import com.umc.ttg.domain.coupon.utils.QrCodeGenerator;
 import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.exception.handler.MemberHandler;
 import com.umc.ttg.domain.member.repository.MemberRepository;
@@ -11,12 +17,16 @@ import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.repository.StoreRepository;
+import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
+import com.umc.ttg.global.util.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Service
@@ -27,9 +37,11 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     private final ReviewRepository reviewRepository;
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final CouponRepository couponRepository;
+    private final AwsS3Service awsS3Service;
 
     @Override
-    public BaseResponseDto<ReviewRegisterResponseDTO> save(Long storeId, ReviewRegisterRequestDTO reviewRegisterRequestDTO) {
+    public BaseResponseDto<ReviewRegisterResponseDTO> save(Long storeId, ReviewRegisterRequestDTO reviewRegisterRequestDTO) throws IOException, WriterException {
 
         // 로그인 구현되면 시큐리티에서 member 가져올 예정
         Long memberId = 1L;
@@ -49,6 +61,17 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
         ReviewRegisterResponseDTO reviewRegisterResponseDTO = new ReviewRegisterResponseDTO(savedReview.getId());
 
+        // 리뷰 등록 시 쿠폰 생성
+        MultipartFile qrCode = QrCodeGenerator.generateQrCode(store);
+        String s3ImageLink = getS3ImageLink(qrCode);
+        couponRepository.save(Coupon.of(store, s3ImageLink, LocalDate.now(), LocalDate.now().plusMonths(1), member));
+
         return BaseResponseDto.onSuccess(reviewRegisterResponseDTO, ResponseCode.OK);
     }
+
+    private String getS3ImageLink(MultipartFile multipartFile) throws IOException {
+        AwsS3 storeImage = awsS3Service.upload(multipartFile, "qrImage");
+        return storeImage.getPath();
+    }
+
 }

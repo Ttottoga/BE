@@ -28,13 +28,10 @@ public class Coupon extends Time {
     @Column(nullable = false, length = 50)
     private String name;
 
-    /* 기획 수정 후 추가
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String barcode;
-     */
-
     @Column(nullable = false, length = 100)
     private String content;
+
+    private String qrCode;
 
     private String imageUrl;
 
@@ -57,9 +54,10 @@ public class Coupon extends Time {
     private Store store;
 
     @Builder
-    private Coupon(String name, String content, String imageUrl, LocalDate startDate, LocalDate endDate, Character statusYn, Member member, Store store) {
+    private Coupon(String name, String content, String qrCode, String imageUrl, LocalDate startDate, LocalDate endDate, Character statusYn, Member member, Store store) {
         this.name = name;
         this.content = content;
+        this.qrCode = qrCode;
         this.imageUrl = imageUrl;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -68,15 +66,17 @@ public class Coupon extends Time {
         this.store = store;
     }
 
-    public static Coupon of(Store store, LocalDate startDate, LocalDate endDate, Member member) {
+    public static Coupon of(Store store, String qrCode, LocalDate startDate, LocalDate endDate, Member member) {
         return Coupon.builder()
-                .name(store.getTitle())
+                .name(store.getName())
                 .content(store.getSubTitle())
                 .imageUrl(store.getImage())
+                .qrCode(qrCode)
                 .startDate(startDate)
                 .endDate(endDate)
-                .statusYn('N')
+                .statusYn('Y')
                 .member(member)
+                .store(store)
                 .build();
     }
 }
