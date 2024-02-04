@@ -75,6 +75,9 @@ public class Store extends Time {
         this.reviewSpan = storeCreateRequestDto.getReviewSpan();
         this.address = storeCreateRequestDto.getAddress();
         this.name = storeCreateRequestDto.getName();
+        this.menu = menu;
+        this.region = region;
+        this.image = storeImage;
 
     }
 
