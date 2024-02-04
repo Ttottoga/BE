@@ -5,12 +5,8 @@ import com.umc.ttg.domain.member.repository.HeartStoreRepository;
 import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
-import com.umc.ttg.domain.store.dto.HomeResponseDto;
-import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
-import com.umc.ttg.domain.store.dto.StoreFindByRegionResponseDto;
-import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
+import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
-import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Menu;
 import com.umc.ttg.domain.store.entity.Region;
@@ -34,11 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Comparator;
 
 @Slf4j
 @Service
@@ -106,32 +99,67 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return BaseResponseDto.onSuccess(findAllByRegionOrderBySort(region, member, pageable), ResponseCode.OK);
+        return BaseResponseDto.onSuccess((Page<StoreFindByRegionResponseDto>) getAllByObject(region, member, pageable), ResponseCode.OK);
 
     }
 
-    private Page<StoreFindByRegionResponseDto> findAllByRegionOrderBySort(Region region, Member member, Pageable pageable) {
+    @Override
+    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
+
+        Long testMemberId = saveTestMember().getId();
+
+        Member member = memberRepository.findById(testMemberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return BaseResponseDto.onSuccess((Page<StoreFindByMenuResponseDto>) getAllByObject(menu, member, pageable), ResponseCode.OK);
+
+    }
+
+    private Page<?> getAllByObject(Object object, Member member, Pageable pageable) {
 
         /**
-         * 관심 상점 여부
-         * HeartStore 에서 Member, Store 로 조회
+         * Object 로 받아서 처리 - 둘로 나눠져 있던 getStoreByMenu, getStoreByRegion 로직을 함수 하나에서 해결
          */
+        if(object instanceof Region) { // Object 가 Region 일 때
 
-        Comparator<Store> compare = Comparator
+            List<StoreFindByRegionResponseDto> stores =
+                    storeRepository.findByRegion((Region) object).stream()
+                            .sorted(comparator())
+                            .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(),
+                                    store.getImage(), store.getServiceInfo(), store.getReviewCount(),
+                                    heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
+
+            return paging(stores,pageable);
+
+        }
+
+        // Object 가 Menu 일 때
+        List<StoreFindByMenuResponseDto> stores =
+                storeRepository.findByMenu((Menu) object).stream()
+                        .sorted(comparator())
+                        .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
+                                store.getImage(), store.getServiceInfo(), store.getReviewCount(),
+                                heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
+
+        return paging(stores,pageable);
+
+    }
+
+    private Comparator<Store> comparator() {
+        return Comparator
                 .comparing(Store::getHotYn)
                 .thenComparing(Store::getReviewCount).reversed();
+    }
 
-        List<StoreFindByRegionResponseDto> stores =
-                storeRepository.findByRegion(region).stream()
-                        .sorted(compare)
-                        .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(), store.getImage(), store.getServiceInfo(), store.getReviewCount(), heartStoreRepository.findByMemberAndStore(member, store).isPresent()))
-                        .toList();
+    private Page paging(List<?> stores, Pageable pageable) {
 
         // 다음 페이지 요청 시, offset 정보 활용하여 데이터 선별하여 전달
         int start = Math.toIntExact(pageable.getOffset());
         int end = Math.min((start + pageable.getPageSize()), stores.size());
 
-        return new PageImpl<>(stores.subList(start, end), pageable, stores.size());
+        return new PageImpl<>(start >= end ? new ArrayList<>() : stores.subList(start, end), pageable, stores.size());
 
     }
 

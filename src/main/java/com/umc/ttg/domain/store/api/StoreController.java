@@ -1,11 +1,7 @@
 package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
-import com.umc.ttg.domain.store.dto.HomeResponseDto;
-import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
-import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
-import com.umc.ttg.domain.store.dto.StoreFindByRegionResponseDto;
-import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
+import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +51,20 @@ public class StoreController {
         Long memberId = 1L;
 
         return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
+
+    }
+
+    @GetMapping("/menu-categories")
+    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
+                                                                             @RequestParam int page,
+                                                                             @RequestParam int size) {
+
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 1L;
+
+        return storeCommandService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
 
     }
 
