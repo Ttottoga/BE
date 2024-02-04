@@ -76,12 +76,17 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     }
 
     @Override
-    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId) {
+    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId) {
+
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store), ResponseCode.OK);
+        boolean submitReview = reviewRepository.findByStoreAndMember(store, saveTestMember()).isPresent();
+
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store, submitReview), ResponseCode.OK);
 
     }
 

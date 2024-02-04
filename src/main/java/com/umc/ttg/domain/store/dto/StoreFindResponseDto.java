@@ -26,5 +26,6 @@ public class StoreFindResponseDto {
     private String address;
     private String sponInfo;
     private int reviewCount;
+    private boolean submitReview;
 
 }

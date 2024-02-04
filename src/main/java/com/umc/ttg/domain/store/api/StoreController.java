@@ -31,7 +31,12 @@ public class StoreController {
     @GetMapping("/{store-id}")
     public BaseResponseDto<StoreFindResponseDto> findStore(@PathVariable("store-id") Long storeId) {
 
-        return storeCommandService.findStore(storeId);
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 1L;
+
+        return storeCommandService.findStore(storeId, memberId);
 
     }
 

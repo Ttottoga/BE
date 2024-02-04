@@ -43,7 +43,7 @@ public class StoreConverter {
     }
 
     // Store 정보 -> StoreFindResponseDto 로
-    public static StoreFindResponseDto convertToStoreFindResponseDto(Store store) {
+    public static StoreFindResponseDto convertToStoreFindResponseDto(Store store, boolean submitReview) {
         return StoreFindResponseDto.builder()
                 .storeImage(store.getImage())
                 .title(store.getTitle())
@@ -59,7 +59,8 @@ public class StoreConverter {
                 .address(store.getAddress())
                 .sponInfo(store.getSponInfo())
                 .reviewCount(store.getReviewCount())
-                .name(store.getName()).build();
+                .name(store.getName())
+                .submitReview(submitReview).build();
     }
 
 }

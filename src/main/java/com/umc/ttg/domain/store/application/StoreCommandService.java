@@ -11,7 +11,7 @@ public interface StoreCommandService {
 
     BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException;
 
-    BaseResponseDto<StoreFindResponseDto> findStore(Long storeId);
+    BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId);
 
     BaseResponseDto<HomeResponseDto> getHome(Long memberId);
 
