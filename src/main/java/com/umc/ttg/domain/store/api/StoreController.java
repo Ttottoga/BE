@@ -1,14 +1,17 @@
 package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
-import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
-import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
-import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
+import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ public class StoreController {
     private final StoreCommandService storeCommandService;
 
     @PostMapping
-    public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) {
+    public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
         return storeCommandService.saveStore(storeCreateRequestDto);
 
@@ -28,7 +31,61 @@ public class StoreController {
     @GetMapping("/{store-id}")
     public BaseResponseDto<StoreFindResponseDto> findStore(@PathVariable("store-id") Long storeId) {
 
-        return storeCommandService.findStore(storeId);
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 1L;
+
+        return storeCommandService.findStore(storeId, memberId);
+
+    }
+
+    /**
+     * 정렬 기준 X : 무조건 베스트순이므로(내림차순)
+     * @param regionId default 1L(지역>전체)
+     * @return
+     */
+    @GetMapping("/region-categories")
+    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
+                                                                                 @RequestParam int page,
+                                                                                 @RequestParam int size) {
+
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 1L;
+
+        return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
+
+    }
+
+    @GetMapping("/menu-categories")
+    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
+                                                                             @RequestParam int page,
+                                                                             @RequestParam int size) {
+
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 1L;
+
+        return storeCommandService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
+
+    }
+
+    @GetMapping("/home")
+    public BaseResponseDto<HomeResponseDto> home() {
+
+        /**
+         * 여기에 토큰으로부터 MemberId 로직 들어갈 것
+         */
+
+        // Test MemberId
+        Long testMemberId = 1L;
+
+        BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMemberId);
+
+        return home;
 
     }
 

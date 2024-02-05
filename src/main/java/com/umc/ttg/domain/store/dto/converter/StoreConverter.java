@@ -5,27 +5,52 @@ import com.umc.ttg.domain.coupon.dto.converter.CouponConverter;
 import com.umc.ttg.domain.coupon.entity.Coupon;
 import com.umc.ttg.domain.coupon.repository.CouponRepository;
 import com.umc.ttg.domain.store.dto.MyPageStoreResponseDto;
+import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
 public class StoreConverter {
 
-    // MultiPartFile -> S3 링크로
-    public static String convertToS3ImageLink(MultipartFile multipartFile) {
-        return "이미지 링크";
-    }
-
     // Store 정보 -> StoreCreateResponseDto 로
     public static StoreCreateResponseDto convertToCreateStoreResponse(Long storeId) {
+
         return new StoreCreateResponseDto(storeId);
+
+    }
+
+    // 리뷰 썸네일 -> 상점 이미지
+    public static String convertToReviewImage(Review review) {
+
+        return review.getStore().getImage();
+
+    }
+
+    // 리뷰 작성자 이미지 -> Member 프로필 이미지
+    public static String convertToReviewProfileImage(Review review) {
+
+        return review.getMember().getProfileImage();
+
+    }
+
+    // 리뷰 작성자 -> Member 닉네임
+    public static String convertToReviewNickname(Review review) {
+
+        return review.getMember().getNickname();
+
+    }
+
+    // 리뷰 타이틀 -> {Member 닉네임}'님의 닉네임'
+    public static String convertToReviewTitle(Review review) {
+
+        return review.getMember().getNickname() + " 님의 닉네임";
+
     }
 
     // Store 정보 -> StoreFindResponseDto 로
-    public static StoreFindResponseDto convertToStoreFindResponseDto(Store store) {
+    public static StoreFindResponseDto convertToStoreFindResponseDto(Store store, boolean submitReview) {
         return StoreFindResponseDto.builder()
                 .storeImage(store.getImage())
                 .title(store.getTitle())
@@ -40,8 +65,11 @@ public class StoreConverter {
                 .placeInfo(store.getPlaceInfo())
                 .address(store.getAddress())
                 .sponInfo(store.getSponInfo())
-                .reviewCount(store.getReviewCount()).build();
+                .reviewCount(store.getReviewCount())
+                .name(store.getName())
+                .submitReview(submitReview).build();
     }
+
 
     /**
      * Store와 CouponRepository를 받아 storeDto와 couponDto를 반환하는 기능

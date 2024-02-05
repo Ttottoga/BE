@@ -8,5 +8,9 @@ import java.util.Optional;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     List<Coupon> findAllByMemberId(Long memberId);
+
     Optional<Coupon> findByStoreId(Long storeId);
+
+    Optional<Coupon> findByIdAndMemberId(Long couponId, Long memberId);
+
 }

@@ -13,6 +13,7 @@ public class StoreFindResponseDto {
 
     private String storeImage;
     private String title;
+    private String name;
     private String subTitle;
     private String regionName;
     private String menuName;
@@ -25,5 +26,6 @@ public class StoreFindResponseDto {
     private String address;
     private String sponInfo;
     private int reviewCount;
+    private boolean submitReview;
 
 }

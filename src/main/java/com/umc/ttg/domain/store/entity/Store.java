@@ -1,7 +1,6 @@
 package com.umc.ttg.domain.store.entity;
 
 import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
-import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert @DynamicUpdate
-@Getter @Setter
+@Getter
 @Entity
 public class Store extends Time {
 
@@ -20,6 +19,9 @@ public class Store extends Time {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+
+    @Column(nullable = false, length = 50)
+    private String name;
 
     @Column(nullable = false, length = 50)
     private String title;
@@ -61,11 +63,10 @@ public class Store extends Time {
     private Menu menu;
 
     @Builder
-    public Store(StoreCreateRequestDto storeCreateRequestDto) {
+    private Store(StoreCreateRequestDto storeCreateRequestDto, Menu menu, Region region, String storeImage) {
 
         this.title = storeCreateRequestDto.getTitle();
         this.subTitle = storeCreateRequestDto.getSubTitle();
-        this.image = StoreConverter.convertToS3ImageLink(storeCreateRequestDto.getStoreImage());
         this.useInfo = storeCreateRequestDto.getUseInfo();
         this.saleInfo = storeCreateRequestDto.getSaleInfo();
         this.placeInfo = storeCreateRequestDto.getPlaceInfo();
@@ -73,6 +74,10 @@ public class Store extends Time {
         this.serviceInfo = storeCreateRequestDto.getServiceInfo();
         this.reviewSpan = storeCreateRequestDto.getReviewSpan();
         this.address = storeCreateRequestDto.getAddress();
+        this.name = storeCreateRequestDto.getName();
+        this.menu = menu;
+        this.region = region;
+        this.image = storeImage;
 
     }
 
