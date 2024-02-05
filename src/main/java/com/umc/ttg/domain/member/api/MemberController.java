@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members/profile")
@@ -25,8 +27,8 @@ public class MemberController {
 
     @PostMapping("/image")
     public BaseResponseDto<MemberImageResponseDTO> modifyProfileImage
-            (@RequestBody @Valid MemberImageRequestDTO memberImageRequestDTO) {
+            (@ModelAttribute @Valid MemberImageRequestDTO memberImageRequestDTO) throws IOException {
 
-        return memberCommandService.modifyImage(memberImageRequestDTO);
+        return memberCommandService.updateImage(memberImageRequestDTO);
     }
 }
