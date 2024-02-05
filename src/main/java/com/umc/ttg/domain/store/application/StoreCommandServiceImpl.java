@@ -183,7 +183,11 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         int start = Math.toIntExact(pageable.getOffset());
         int end = Math.min((start + pageable.getPageSize()), stores.size());
 
-        return new PageImpl<>(start >= end ? new ArrayList<>() : stores.subList(start, end), pageable, stores.size());
+        if (start >= end) {
+            throw new StoreHandler(ResponseCode.PAGE_NOT_FOUND);
+        }
+
+        return new PageImpl<>(stores.subList(start, end), pageable, stores.size());
 
     }
 
