@@ -66,7 +66,20 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return BaseResponseDto.onSuccess((Page<StoreFindByRegionResponseDto>) getAllByObject(region, member, pageable), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(getStoresByRegion(region, member, pageable), ResponseCode.OK);
+
+    }
+
+    private Page<StoreFindByRegionResponseDto> getStoresByRegion(Region region, Member member, Pageable pageable) {
+
+        List<StoreFindByRegionResponseDto> stores =
+                storeRepository.findByRegion(region).stream()
+                        .sorted(comparator())
+                        .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(),
+                                store.getImage(), store.getServiceInfo(), store.getReviewCount(),
+                                heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
+
+        return paging(stores,pageable);
 
     }
 
@@ -78,54 +91,39 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return BaseResponseDto.onSuccess((Page<StoreFindByMenuResponseDto>) getAllByObject(menu, member, pageable), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(getStoresByMenu(menu, member, pageable), ResponseCode.OK);
+
+    }
+
+    private Page<StoreFindByMenuResponseDto> getStoresByMenu(Menu menu, Member member, Pageable pageable) {
+
+        List<StoreFindByMenuResponseDto> stores =
+                storeRepository.findByMenu(menu).stream()
+                        .sorted(comparator())
+                        .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
+                                store.getImage(), store.getServiceInfo(), store.getReviewCount(),
+                                heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
+
+        return paging(stores,pageable);
 
     }
 
     @Override
     public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
 
-        String correctKeyword = getCorrectKeyword(keyword);
+        String correctKeyword = validateCorrectKeyword(keyword);
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return BaseResponseDto.onSuccess((Page<StoreSearchResponseDto>) getAllByObject(correctKeyword, member, pageable), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(searchResult(correctKeyword, member, pageable), ResponseCode.OK);
     }
 
-    private Page<?> getAllByObject(Object object, Member member, Pageable pageable) {
-
-        /**
-         * Object 로 받아서 처리 - 둘로 나눠져 있던 getStoreByMenu, getStoreByRegion 로직을 함수 하나에서 해결
-         */
-        if(object instanceof Region) { // Object 가 Region 일 때
-
-            List<StoreFindByRegionResponseDto> stores =
-                    storeRepository.findByRegion((Region) object).stream()
-                            .sorted(comparator())
-                            .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(),
-                                    store.getImage(), store.getServiceInfo(), store.getReviewCount(),
-                                    heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
-
-            return paging(stores,pageable);
-
-        }
-        else if (object instanceof Menu) { // Object 가 Menu 일 때
-            List<StoreFindByMenuResponseDto> stores =
-                    storeRepository.findByMenu((Menu) object).stream()
-                            .sorted(comparator())
-                            .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
-                                    store.getImage(), store.getServiceInfo(), store.getReviewCount(),
-                                    heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
-
-            return paging(stores,pageable);
-        }
-
-        // Object 가 String 일 때, Search 기능
+    private Page<StoreSearchResponseDto> searchResult(String keyword, Member member, Pageable pageable) {
 
         List<StoreSearchResponseDto> stores =
-                storeRepository.findByTitleContainingOrNameContaining((String) object, (String) object).stream()
+                storeRepository.findByTitleContainingOrNameContaining(keyword, keyword).stream()
                         .sorted(comparator())
                         .map(store -> new StoreSearchResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),
@@ -155,7 +153,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     }
 
-    private String getCorrectKeyword(String keyword) {
+    private String validateCorrectKeyword(String keyword) {
 
         if(keyword == null || keyword.isEmpty() || keyword.isBlank()) {
             throw new StoreHandler(ResponseCode.SEARCH_KEYWORD_NOT_FOUND);
@@ -168,12 +166,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<HomeResponseDto> getHome(Long memberId) {
 
-        /**
-         * testMember
-         */
-        Long testMemberId = saveTestMember().getId();
-
-        Member member = memberRepository.findById(testMemberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         // top 15
