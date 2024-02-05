@@ -10,8 +10,7 @@ import java.util.List;
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findByRegion(Region region);
-    List<Store> findByTitleContaining(String keyword);
-
+    List<Store> findByTitleContainingOrNameContaining(String keyword, String name);
     List<Store> findByMenu(Menu menu);
 
 }

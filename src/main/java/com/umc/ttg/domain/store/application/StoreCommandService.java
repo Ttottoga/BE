@@ -20,4 +20,6 @@ public interface StoreCommandService {
 
     BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId);
 
+    BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId);
+
 }

@@ -2,8 +2,12 @@ package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
 import com.umc.ttg.domain.store.dto.*;
+import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.global.common.BaseResponseDto;
+import com.umc.ttg.global.common.ResponseCode;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +39,7 @@ public class StoreController {
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          */
-        Long memberId = 1L;
+        Long memberId = 2L;
 
         return storeCommandService.findStore(storeId, memberId);
 
@@ -54,7 +58,7 @@ public class StoreController {
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          */
-        Long memberId = 1L;
+        Long memberId = 2L;
 
         return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
 
@@ -68,7 +72,7 @@ public class StoreController {
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          */
-        Long memberId = 1L;
+        Long memberId = 2L;
 
         return storeCommandService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
 
@@ -82,11 +86,25 @@ public class StoreController {
          */
 
         // Test MemberId
-        Long testMemberId = 1L;
+        Long testMemberId = 2L;
 
         BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMemberId);
 
         return home;
+
+    }
+
+    @GetMapping("/search")
+    public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
+                                                                     @RequestParam @PositiveOrZero int page,
+                                                                     @RequestParam @PositiveOrZero int size) {
+
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 2L;
+
+        return storeCommandService.searchStore(keyword, page, size, memberId);
 
     }
 

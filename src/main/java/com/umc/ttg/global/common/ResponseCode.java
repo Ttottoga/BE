@@ -33,6 +33,9 @@ public enum ResponseCode {
     // AWS S3 Error
     S3_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "S34001", "파일 업로드에 실패했습니다."),
 
+    // Store Error
+    SEARCH_KEYWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4001", "입력된 검색어가 없습니다."),
+
     // Article Error
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다.");
 
