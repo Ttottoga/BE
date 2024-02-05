@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StoreFindByMenuResponseDto {
+public class StoreResultResponseDto {
 
     private Long storeId;
     private String storeTitle;

@@ -59,7 +59,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
      * 한 번의 요청마다 20개씩 넘겨줌(무한 스크롤 방식)
      */
     @Override
-    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
@@ -70,12 +70,12 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     }
 
-    private Page<StoreFindByRegionResponseDto> getStoresByRegion(Region region, Member member, Pageable pageable) {
+    private Page<StoreResultResponseDto> getStoresByRegion(Region region, Member member, Pageable pageable) {
 
-        List<StoreFindByRegionResponseDto> stores =
+        List<StoreResultResponseDto> stores =
                 storeRepository.findByRegion(region).stream()
                         .sorted(comparator())
-                        .map(store -> new StoreFindByRegionResponseDto(store.getId(), store.getTitle(),
+                        .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),
                                 heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
 
@@ -84,7 +84,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     }
 
     @Override
-    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
@@ -95,12 +95,12 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     }
 
-    private Page<StoreFindByMenuResponseDto> getStoresByMenu(Menu menu, Member member, Pageable pageable) {
+    private Page<StoreResultResponseDto> getStoresByMenu(Menu menu, Member member, Pageable pageable) {
 
-        List<StoreFindByMenuResponseDto> stores =
+        List<StoreResultResponseDto> stores =
                 storeRepository.findByMenu(menu).stream()
                         .sorted(comparator())
-                        .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
+                        .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),
                                 heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
 
@@ -109,7 +109,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     }
 
     @Override
-    public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
 
         String correctKeyword = validateCorrectKeyword(keyword);
 
@@ -120,12 +120,12 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         return BaseResponseDto.onSuccess(searchResult(correctKeyword, member, pageable), ResponseCode.OK);
     }
 
-    private Page<StoreSearchResponseDto> searchResult(String keyword, Member member, Pageable pageable) {
+    private Page<StoreResultResponseDto> searchResult(String keyword, Member member, Pageable pageable) {
 
-        List<StoreSearchResponseDto> stores =
+        List<StoreResultResponseDto> stores =
                 storeRepository.findByTitleContainingOrNameContaining(keyword, keyword).stream()
                         .sorted(comparator())
-                        .map(store -> new StoreSearchResponseDto(store.getId(), store.getTitle(),
+                        .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),
                                 heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
 

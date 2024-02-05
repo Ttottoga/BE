@@ -49,7 +49,7 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region-categories")
-    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
                                                                                  @RequestParam int page,
                                                                                  @RequestParam int size) {
 
@@ -63,7 +63,7 @@ public class StoreController {
     }
 
     @GetMapping("/menu-categories")
-    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
                                                                              @RequestParam int page,
                                                                              @RequestParam int size) {
 
@@ -91,7 +91,7 @@ public class StoreController {
     }
 
     @GetMapping("/search")
-    public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
+    public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
                                                                      @RequestParam @PositiveOrZero int page,
                                                                      @RequestParam @PositiveOrZero int size) {
 

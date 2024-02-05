@@ -10,10 +10,10 @@ public interface StoreQueryService {
 
     BaseResponseDto<HomeResponseDto> getHome(Long memberId);
 
-    BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId);
+    BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId);
 
-    BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId);
+    BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId);
 
-    BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId);
+    BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, Long memberId);
 
 }
