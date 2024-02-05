@@ -1,12 +1,10 @@
 package com.umc.ttg.domain.store.application;
 
-import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public interface StoreCommandService {
 
