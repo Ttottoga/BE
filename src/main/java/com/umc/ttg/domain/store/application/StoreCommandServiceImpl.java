@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final HeartStoreRepository heartStoreRepository;
 
     @Override
+    @Transactional // 저장은 모든 과정이 완료되어야 하므로
     public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
         Menu menu = menuRepository.findById(storeCreateRequestDto.getMenu())
