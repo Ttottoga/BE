@@ -2,12 +2,8 @@ package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
 import com.umc.ttg.domain.store.dto.*;
-import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.global.common.BaseResponseDto;
-import com.umc.ttg.global.common.ResponseCode;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
