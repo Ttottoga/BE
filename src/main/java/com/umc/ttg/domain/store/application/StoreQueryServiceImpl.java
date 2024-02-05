@@ -133,6 +133,9 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     }
 
+    /**
+     * 공통 기능들
+     */
     private Comparator<Store> comparator() {
         return Comparator
                 .comparing(Store::getHotYn)
