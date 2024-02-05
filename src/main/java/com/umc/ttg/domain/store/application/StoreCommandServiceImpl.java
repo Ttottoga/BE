@@ -256,7 +256,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Collections.shuffle(hotStores);
 
         return hotStores.stream()
-                .limit(5).collect(Collectors.toList());
+                .limit(3).collect(Collectors.toList());
 
     }
 
