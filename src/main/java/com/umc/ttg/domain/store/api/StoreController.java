@@ -1,6 +1,7 @@
 package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
+import com.umc.ttg.domain.store.application.StoreQueryService;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class StoreController {
 
     private final StoreCommandService storeCommandService;
+    private final StoreQueryService storeQueryService;
 
     @PostMapping
     public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) throws IOException {
@@ -37,7 +39,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStore(storeId, memberId);
+        return storeQueryService.findStore(storeId, memberId);
 
     }
 
@@ -56,7 +58,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
 
     }
 
@@ -70,7 +72,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
 
     }
 
@@ -84,9 +86,7 @@ public class StoreController {
         // Test MemberId
         Long testMemberId = 2L;
 
-        BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMemberId);
-
-        return home;
+        return storeQueryService.getHome(testMemberId);
 
     }
 
@@ -100,7 +100,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeCommandService.searchStore(keyword, page, size, memberId);
+        return storeQueryService.searchStore(keyword, page, size, memberId);
 
     }
 
