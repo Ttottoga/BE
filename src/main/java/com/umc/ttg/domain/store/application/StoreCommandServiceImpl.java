@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final HeartStoreRepository heartStoreRepository;
 
     @Override
+    @Transactional // 저장은 모든 과정이 완료되어야 하므로
     public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException {
 
         Menu menu = menuRepository.findById(storeCreateRequestDto.getMenu())
@@ -78,13 +80,13 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId) {
 
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        boolean submitReview = reviewRepository.findByStoreAndMember(store, saveTestMember()).isPresent();
+        boolean submitReview = reviewRepository.findByStoreAndMember(store, member).isPresent();
 
         return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store, submitReview), ResponseCode.OK);
 
@@ -97,9 +99,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
-        Long testMemberId = saveTestMember().getId();
-
-        Member member = memberRepository.findById(testMemberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -111,15 +111,25 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     @Override
     public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
 
-        Long testMemberId = saveTestMember().getId();
-
-        Member member = memberRepository.findById(testMemberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Pageable pageable = PageRequest.of(page, size);
 
         return BaseResponseDto.onSuccess((Page<StoreFindByMenuResponseDto>) getAllByObject(menu, member, pageable), ResponseCode.OK);
 
+    }
+
+    @Override
+    public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
+
+        String correctKeyword = getCorrectKeyword(keyword);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return BaseResponseDto.onSuccess((Page<StoreSearchResponseDto>) getAllByObject(correctKeyword, member, pageable), ResponseCode.OK);
     }
 
     private Page<?> getAllByObject(Object object, Member member, Pageable pageable) {
@@ -139,12 +149,23 @@ public class StoreCommandServiceImpl implements StoreCommandService {
             return paging(stores,pageable);
 
         }
+        else if (object instanceof Menu) { // Object 가 Menu 일 때
+            List<StoreFindByMenuResponseDto> stores =
+                    storeRepository.findByMenu((Menu) object).stream()
+                            .sorted(comparator())
+                            .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
+                                    store.getImage(), store.getServiceInfo(), store.getReviewCount(),
+                                    heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
 
-        // Object 가 Menu 일 때
-        List<StoreFindByMenuResponseDto> stores =
-                storeRepository.findByMenu((Menu) object).stream()
+            return paging(stores,pageable);
+        }
+
+        // Object 가 String 일 때, Search 기능
+
+        List<StoreSearchResponseDto> stores =
+                storeRepository.findByTitleContainingOrNameContaining((String) object, (String) object).stream()
                         .sorted(comparator())
-                        .map(store -> new StoreFindByMenuResponseDto(store.getId(), store.getTitle(),
+                        .map(store -> new StoreSearchResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),
                                 heartStoreRepository.findByMemberAndStore(member, store).isPresent())).toList();
 
@@ -164,7 +185,21 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         int start = Math.toIntExact(pageable.getOffset());
         int end = Math.min((start + pageable.getPageSize()), stores.size());
 
-        return new PageImpl<>(start >= end ? new ArrayList<>() : stores.subList(start, end), pageable, stores.size());
+        if (start >= end) {
+            throw new StoreHandler(ResponseCode.PAGE_NOT_FOUND);
+        }
+
+        return new PageImpl<>(stores.subList(start, end), pageable, stores.size());
+
+    }
+
+    private String getCorrectKeyword(String keyword) {
+
+        if(keyword == null || keyword.isEmpty() || keyword.isBlank()) {
+            throw new StoreHandler(ResponseCode.SEARCH_KEYWORD_NOT_FOUND);
+        }
+
+        return keyword;
 
     }
 
@@ -221,7 +256,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Collections.shuffle(hotStores);
 
         return hotStores.stream()
-                .limit(5).collect(Collectors.toList());
+                .limit(3).collect(Collectors.toList());
 
     }
 
