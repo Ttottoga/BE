@@ -1,9 +1,16 @@
 package com.umc.ttg.domain.store.dto.converter;
 
+import com.umc.ttg.domain.coupon.dto.MyPageCouponResponseDTO;
+import com.umc.ttg.domain.coupon.dto.converter.CouponConverter;
+import com.umc.ttg.domain.coupon.entity.Coupon;
+import com.umc.ttg.domain.coupon.repository.CouponRepository;
+import com.umc.ttg.domain.store.dto.MyPageStoreResponseDto;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
 import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
+
+import java.util.Optional;
 
 public class StoreConverter {
 
@@ -63,4 +70,29 @@ public class StoreConverter {
                 .submitReview(submitReview).build();
     }
 
+
+    /**
+     * Store와 CouponRepository를 받아 storeDto와 couponDto를 반환하는 기능
+     */
+    public static MyPageStoreResponseDto convertToMyStoreDto(Store store, CouponRepository couponRepository) {
+        if (store == null) {
+            return null;
+        }
+
+        MyPageStoreResponseDto storeResponseDto = MyPageStoreResponseDto.builder()
+                .storeId(store.getId())
+                .title(store.getTitle())
+                .image(store.getImage())
+                .build();
+
+        // Coupon 정보 설정
+        Optional<Coupon> optionalCoupon = couponRepository.findByStoreId(store.getId());
+
+        if (optionalCoupon.isPresent()) {
+            MyPageCouponResponseDTO couponResponseDTO = CouponConverter.convertToMyCouponDto(optionalCoupon.get());
+            storeResponseDto.setCouponDto(couponResponseDTO);
+        }
+
+        return storeResponseDto;
+    }
 }
