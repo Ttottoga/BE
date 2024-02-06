@@ -8,14 +8,17 @@ import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
+import com.umc.ttg.global.error.handler.AwsS3Handler;
 import com.umc.ttg.global.util.AwsS3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberCommandServiceImpl implements MemberCommandService {
 
@@ -30,6 +33,10 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
+
+        if (!CheckFileExtension(memberImageRequestDTO)) {
+            throw new AwsS3Handler(ResponseCode.S3_UPLOAD_FAIL);
+        }
 
         member.setProfileImage(getS3ImageLink(memberImageRequestDTO.getProfileImage()));
 
@@ -46,5 +53,18 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         return memberImage.getPath();
 
+    }
+
+    private boolean CheckFileExtension(MemberImageRequestDTO memberImageRequestDTO) {
+
+        // 지원하지 않는 파일일 경우
+        String fileName = String.valueOf(memberImageRequestDTO.getProfileImage().getOriginalFilename());
+        int lastIndex = fileName.lastIndexOf(".");
+        String fileExtensionName = fileName.substring(lastIndex + 1);
+
+        if (!fileExtensionName.equals("jpg") && !fileExtensionName.equals("png") && !fileExtensionName.equals("jpeg"))
+            return false;
+
+        return true;
     }
 }
