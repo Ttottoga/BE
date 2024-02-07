@@ -36,6 +36,7 @@ public class StoreController {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
@@ -55,6 +56,7 @@ public class StoreController {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
@@ -69,6 +71,7 @@ public class StoreController {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
@@ -80,13 +83,14 @@ public class StoreController {
     public BaseResponseDto<HomeResponseDto> home() {
 
         /**
-         * 여기에 토큰으로부터 MemberId 로직 들어갈 것
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
 
         // Test MemberId
-        Long testMemberId = 2L;
+        Long memberId = 2L;
 
-        return storeQueryService.getHome(testMemberId);
+        return storeQueryService.getHome(memberId);
 
     }
 
@@ -97,6 +101,7 @@ public class StoreController {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 

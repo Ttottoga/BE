@@ -21,10 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,8 +39,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId) {
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = validateCorrectMember(memberId);
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
@@ -61,7 +57,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = validateCorrectMember(memberId);
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -86,7 +82,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = validateCorrectMember(memberId);
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -113,7 +109,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
         String correctKeyword = validateCorrectKeyword(keyword);
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        Member member = validateCorrectMember(memberId);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -163,6 +159,16 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         }
 
         return keyword;
+
+    }
+
+    private Member validateCorrectMember(Long memberId) {
+
+        if(memberId == null) {
+            return null;
+        }
+
+        return memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
     }
 
