@@ -2,12 +2,9 @@ package com.umc.ttg.domain.member.entity;
 
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+@Getter @Setter
 @Entity
 @NoArgsConstructor
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)

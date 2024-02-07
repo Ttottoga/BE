@@ -41,7 +41,10 @@ public enum ResponseCode {
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
 
     // Review Error
-    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰가 없습니다.");
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰가 없습니다."),
+
+    // Store Error
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4001", "상점이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

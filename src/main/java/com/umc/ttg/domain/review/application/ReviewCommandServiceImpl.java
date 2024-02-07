@@ -35,7 +35,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         Long memberId = 1L;
 
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+                .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
