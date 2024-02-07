@@ -1,6 +1,8 @@
 package com.umc.ttg.domain.store.application;
 
+import com.umc.ttg.domain.member.entity.HeartStore;
 import com.umc.ttg.domain.member.entity.Member;
+import com.umc.ttg.domain.member.exception.handler.MemberHandler;
 import com.umc.ttg.domain.member.repository.HeartStoreRepository;
 import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.domain.review.entity.Review;
@@ -288,4 +290,53 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
     }
 
+    @Override
+    public BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId) {
+
+        // 임시
+        Long memberId = 1L;
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
+
+        if (heartStoreRepository.findByMemberAndStore(member, store).isPresent()) {
+            throw new StoreHandler(ResponseCode.ALREADY_HEART_EXCEPTION);
+        }
+
+        HeartStore heartStore = HeartStore.builder()
+                .member(member)
+                .store(store)
+                .build();
+
+        HeartStore savedHeartStore = heartStoreRepository.save(heartStore);
+
+        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(savedHeartStore.getId());
+
+        return BaseResponseDto.onSuccess(heartStoreResponseDto, ResponseCode.OK);
+    }
+
+    @Override
+    public BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId) {
+
+        // 임시
+        Long memberId = 1L;
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
+
+        HeartStore heartStore = heartStoreRepository.findByMemberAndStore(member, store)
+                .orElseThrow(() -> new StoreHandler(ResponseCode.NOT_HEART_EXCEPTION));
+
+        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(heartStore.getId());
+
+        heartStoreRepository.delete(heartStore);
+
+        return BaseResponseDto.onSuccess(heartStoreResponseDto, ResponseCode.OK);
+    }
 }

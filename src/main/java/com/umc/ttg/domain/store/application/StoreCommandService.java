@@ -20,4 +20,7 @@ public interface StoreCommandService {
 
     BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId);
 
+    BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId);
+
+    BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId);
 }
