@@ -51,8 +51,8 @@ public class StoreController {
      */
     @GetMapping("/region-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
-                                                                                 @RequestParam int page,
-                                                                                 @RequestParam int size) {
+                                                                                 @RequestParam @PositiveOrZero int page,
+                                                                                 @RequestParam @PositiveOrZero int size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
@@ -66,8 +66,8 @@ public class StoreController {
 
     @GetMapping("/menu-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
-                                                                             @RequestParam int page,
-                                                                             @RequestParam int size) {
+                                                                             @RequestParam @PositiveOrZero int page,
+                                                                             @RequestParam @PositiveOrZero int size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
