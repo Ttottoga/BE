@@ -1,56 +1,83 @@
 package com.umc.ttg.global.error.handler;
 
 import com.umc.ttg.global.common.BaseResponseDto;
+import com.umc.ttg.global.common.ErrorResponse;
 import com.umc.ttg.global.common.ResponseCode;
 import com.umc.ttg.global.error.GeneralException;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
-public class MasterExceptionHandler extends ResponseEntityExceptionHandler {
-    Logger logger = LoggerFactory.getLogger(MasterExceptionHandler.class);
+public class MasterExceptionHandler {
 
-
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
         return handleExceptionInternal(e, ResponseCode._UNAUTHORIZED, request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler(GeneralException.class)
     public ResponseEntity<Object> general(GeneralException e, WebRequest request) {
         return handleExceptionInternal(e, e.getErrorCode(), request);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        e.printStackTrace();
+        e.printStackTrace(); // 클라이언트에게 불필요한 정보를 노출할 수 있으므로 삭제
         return handleExceptionInternalFalse(e, ResponseCode._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ResponseCode._INTERNAL_SERVER_ERROR.getHttpStatus(),request);
     }
 
-
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
-                                                             HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        logger.info("At exception handler");
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) request;
-        HttpServletRequest servletRequest = requestAttributes.getRequest();
-
-        String contentType = request.getHeader("Content-Type");
-        logger.info("Content-Type : {}", contentType);
-        logger.error("발생한 에러의 로그 :", ex);
-        return handleExceptionInternal(ex, ResponseCode.valueOf(status), headers, status, request);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> processValidationError(MethodArgumentNotValidException exception, WebRequest request) {
+        final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(exception.getBindingResult());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(buildFieldErrors(ResponseCode._BAD_REQUEST, fieldErrors));
     }
 
+//    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
+//                                                             HttpHeaders headers, HttpStatus status, WebRequest request) {
+//
+//        log.info("At exception handler");
+//        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) request;
+//        HttpServletRequest servletRequest = requestAttributes.getRequest();
+//
+//        String contentType = request.getHeader("Content-Type");
+//        log.info("Content-Type : {}", contentType);
+//        log.error("발생한 에러의 로그 :", ex);
+//        return handleExceptionInternal(ex, ResponseCode.valueOf(status), headers, status, request);
+//    }
+
+    private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {
+        final List<FieldError> errors = bindingResult.getFieldErrors();
+        return errors.parallelStream()
+                .map(error -> ErrorResponse.FieldError.builder()
+                        .field(error.getField())
+                        .message(error.getDefaultMessage()).build())
+                .collect(Collectors.toList());
+    }
+
+    private ErrorResponse buildFieldErrors(ResponseCode responseCode, List<ErrorResponse.FieldError> errors) {
+        return ErrorResponse.builder()
+                .code(responseCode.getCode())
+                .status(responseCode.getHttpStatus().value())
+                .message(responseCode.getMessage())
+                .errors(errors).build();
+    }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ResponseCode errorCode,
                                                            WebRequest request) {
@@ -62,24 +89,14 @@ public class MasterExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ResponseCode errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
         BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                status,
-                request
-        );
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(body);
     }
 
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ResponseCode errorCode,
                                                                 HttpHeaders headers, HttpStatus status, WebRequest request) {
         BaseResponseDto<Object> body = BaseResponseDto.onFailure(errorCode);
-        return super.handleExceptionInternal(
-                e,
-                body,
-                headers,
-                status,
-                request
-        );
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(body);
     }
 }
