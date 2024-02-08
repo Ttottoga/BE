@@ -45,8 +45,9 @@ public class StoreQueryServiceImpl implements StoreQueryService {
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         boolean submitReview = reviewRepository.findByStoreAndMember(store, member).isPresent();
+        boolean heartStore = heartStoreRepository.findByMemberAndStore(member, store).isPresent();
 
-        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store, submitReview), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreFindResponseDto(store, submitReview, heartStore), ResponseCode.OK);
 
     }
 
