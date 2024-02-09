@@ -36,15 +36,15 @@ public enum ResponseCode {
     // Store Error
     SEARCH_KEYWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4001", "입력된 검색어가 없습니다."),
     PAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4002", "없는 페이지입니다."),
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4003", "상점이 없습니다."),
+    ALREADY_HEART_EXCEPTION(HttpStatus.BAD_REQUEST, "STORE4004", "이미 관심 상점으로 등록되었습니다."),
+    NOT_HEART_EXCEPTION(HttpStatus.BAD_REQUEST, "STORE4005", "해당 상점은 관심 상점으로 등록되지 않았으므로 삭제할 수 없습니다."),
 
     // Article Error
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
 
     // Review Error
-    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰가 없습니다."),
-
-    // Store Error
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4001", "상점이 없습니다.");
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰가 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
