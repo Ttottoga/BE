@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface StoreCommandService {
 
-    BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException;
+    BaseResponseDto<StoreResponseDto> saveStore(StoreRequestDto storeRequestDto) throws IOException;
 
     BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId);
 
@@ -19,5 +19,7 @@ public interface StoreCommandService {
     BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId);
 
     BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(String keyword, int page, int size, Long memberId);
+
+    BaseResponseDto<StoreResponseDto> updateStore(StoreRequestDto storeRequestDto, Long storeId) throws IOException;
 
 }

@@ -49,23 +49,23 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
     @Override
     @Transactional // 저장은 모든 과정이 완료되어야 하므로
-    public BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException {
+    public BaseResponseDto<StoreResponseDto> saveStore(StoreRequestDto storeRequestDto) throws IOException {
 
-        Menu menu = menuRepository.findById(storeCreateRequestDto.getMenu())
+        Menu menu = menuRepository.findById(storeRequestDto.getMenu())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        Region region = regionRepository.findById(storeCreateRequestDto.getRegion())
+        Region region = regionRepository.findById(storeRequestDto.getRegion())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
         Store store = Store.builder()
-                .storeCreateRequestDto(storeCreateRequestDto)
+                .storeRequestDto(storeRequestDto)
                 .menu(menu)
                 .region(region)
-                .storeImage(getS3ImageLink(storeCreateRequestDto.getStoreImage())).build();
+                .storeImage(getS3ImageLink(storeRequestDto.getStoreImage())).build();
 
         Store savedStore = storeRepository.save(store);
 
-        return BaseResponseDto.onSuccess(StoreConverter.convertToCreateStoreResponse(savedStore.getId()), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreResponse(savedStore.getId()), ResponseCode.OK);
 
     }
 
@@ -285,6 +285,25 @@ public class StoreCommandServiceImpl implements StoreCommandService {
                 .phoneNum("010")
                 .benefitCount(0)
                 .build());
+
+    }
+
+    @Override
+    @Transactional
+    public BaseResponseDto<StoreResponseDto> updateStore(StoreRequestDto storeRequestDto, Long storeId) throws IOException {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        Menu menu = menuRepository.findById(storeRequestDto.getMenu())
+                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        Region region = regionRepository.findById(storeRequestDto.getRegion())
+                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+
+        store.update(storeRequestDto, menu, region, getS3ImageLink(storeRequestDto.getStoreImage()));
+
+        return BaseResponseDto.onSuccess(StoreConverter.convertToStoreResponse(store.getId()), ResponseCode.OK);
 
     }
 

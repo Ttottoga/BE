@@ -6,7 +6,7 @@ import com.umc.ttg.domain.coupon.entity.Coupon;
 import com.umc.ttg.domain.coupon.repository.CouponRepository;
 import com.umc.ttg.domain.store.dto.MyPageStoreResponseDto;
 import com.umc.ttg.domain.review.entity.Review;
-import com.umc.ttg.domain.store.dto.StoreCreateResponseDto;
+import com.umc.ttg.domain.store.dto.StoreResponseDto;
 import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
 
@@ -15,9 +15,9 @@ import java.util.Optional;
 public class StoreConverter {
 
     // Store 정보 -> StoreCreateResponseDto 로
-    public static StoreCreateResponseDto convertToCreateStoreResponse(Long storeId) {
+    public static StoreResponseDto convertToStoreResponse(Long storeId) {
 
-        return new StoreCreateResponseDto(storeId);
+        return new StoreResponseDto(storeId);
 
     }
 
