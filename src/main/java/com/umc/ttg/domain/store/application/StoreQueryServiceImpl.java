@@ -42,7 +42,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         Member member = validateCorrectMember(memberId);
 
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+                .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
 
         boolean submitReview = reviewRepository.findByStoreAndMember(store, member).isPresent();
         boolean heartStore = heartStoreRepository.findByMemberAndStore(member, store).isPresent();
@@ -59,7 +59,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
         Member member = validateCorrectMember(memberId);
-        Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+        Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -84,7 +84,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
 
         Member member = validateCorrectMember(memberId);
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode.MENU_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
 

@@ -36,6 +36,13 @@ public enum ResponseCode {
     // Store Error
     SEARCH_KEYWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4001", "입력된 검색어가 없습니다."),
     PAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4002", "없는 페이지입니다."),
+    STORE_NOT_FOUND(HttpStatus.BAD_REQUEST, "STORE4003", "존재하지 않는 상점입니다."),
+
+    // Menu Error
+    MENU_NOT_FOUND(HttpStatus.BAD_REQUEST, "MENU4001", "카테고리에 없는 메뉴입니다."),
+
+    // Region Error
+    REGION_NOT_FOUND(HttpStatus.BAD_REQUEST, "REGION4001", "카테고리에 없는 지역입니다."),
 
     // Article Error
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
