@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class BaseResponseDto<T> {
 
@@ -22,7 +22,27 @@ public class BaseResponseDto<T> {
         return new BaseResponseDto<>(true, code.getCode(), code.getMessage(), data);
     }
 
-    public static <T> BaseResponseDto<T> onFailure(ResponseCode code) {
-        return new BaseResponseDto<>(false, code.getCode(), code.getMessage(), null);
+    public static <T> BaseResponseDto<T> onFailure(T errors, ResponseCode code) {
+        return new BaseResponseDto<>(false, code.getCode(), code.getMessage(), errors);
+    }
+
+    @Builder
+    public BaseResponseDto(Boolean isSuccess, String code, String message, T result) {
+        this.isSuccess = isSuccess;
+        this.code = code;
+        this.message = message;
+        this.result = result;
+    }
+
+    @Getter
+    public static class FieldError {
+        private String field;
+        private String message;
+
+        @Builder
+        public FieldError(String field, String message) {
+            this.field = field;
+            this.message = message;
+        }
     }
 }
