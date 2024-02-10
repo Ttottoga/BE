@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class StoreCreateRequestDto {
+public class StoreRequestDto {
 
     @NotNull @NotEmpty @NotBlank
     private String title;

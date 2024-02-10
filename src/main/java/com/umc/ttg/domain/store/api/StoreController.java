@@ -23,9 +23,9 @@ public class StoreController {
     private final StoreCommandService storeCommandService;
 
     @PostMapping
-    public BaseResponseDto<StoreCreateResponseDto> createStore(@ModelAttribute @Valid StoreCreateRequestDto storeCreateRequestDto) throws IOException {
+    public BaseResponseDto<StoreResponseDto> createStore(@ModelAttribute @Valid StoreRequestDto storeRequestDto) throws IOException {
 
-        return storeCommandService.saveStore(storeCreateRequestDto);
+        return storeCommandService.saveStore(storeRequestDto);
 
     }
 
@@ -104,6 +104,18 @@ public class StoreController {
 
     }
 
+    @PutMapping("/{store-id}")
+    public BaseResponseDto<StoreResponseDto> storeUpdate(@ModelAttribute @Valid StoreRequestDto storeRequestDto, @PathVariable("store-id") Long storeId) throws IOException {
+
+        /**
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         */
+        Long memberId = 2L;
+
+        return storeCommandService.updateStore(storeRequestDto, storeId);
+
+    }
+
     @PostMapping("/{store-id}/heart")
     public BaseResponseDto<HeartStoreResponseDto> insertHeartStore (@PathVariable("store-id") Long storeId) {
 
@@ -115,4 +127,5 @@ public class StoreController {
 
         return storeCommandService.deleteHeart(storeId);
     }
+
 }

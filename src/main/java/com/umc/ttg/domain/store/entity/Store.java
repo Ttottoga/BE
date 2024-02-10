@@ -1,6 +1,6 @@
 package com.umc.ttg.domain.store.entity;
 
-import com.umc.ttg.domain.store.dto.StoreCreateRequestDto;
+import com.umc.ttg.domain.store.dto.StoreRequestDto;
 import com.umc.ttg.global.util.Time;
 import jakarta.persistence.*;
 import lombok.*;
@@ -63,22 +63,38 @@ public class Store extends Time {
     private Menu menu;
 
     @Builder
-    private Store(StoreCreateRequestDto storeCreateRequestDto, Menu menu, Region region, String storeImage) {
+    private Store(StoreRequestDto storeRequestDto, Menu menu, Region region, String storeImage) {
 
-        this.title = storeCreateRequestDto.getTitle();
-        this.subTitle = storeCreateRequestDto.getSubTitle();
-        this.useInfo = storeCreateRequestDto.getUseInfo();
-        this.saleInfo = storeCreateRequestDto.getSaleInfo();
-        this.placeInfo = storeCreateRequestDto.getPlaceInfo();
-        this.sponInfo = storeCreateRequestDto.getSponInfo();
-        this.serviceInfo = storeCreateRequestDto.getServiceInfo();
-        this.reviewSpan = storeCreateRequestDto.getReviewSpan();
-        this.address = storeCreateRequestDto.getAddress();
-        this.name = storeCreateRequestDto.getName();
+        this.title = storeRequestDto.getTitle();
+        this.subTitle = storeRequestDto.getSubTitle();
+        this.useInfo = storeRequestDto.getUseInfo();
+        this.saleInfo = storeRequestDto.getSaleInfo();
+        this.placeInfo = storeRequestDto.getPlaceInfo();
+        this.sponInfo = storeRequestDto.getSponInfo();
+        this.serviceInfo = storeRequestDto.getServiceInfo();
+        this.reviewSpan = storeRequestDto.getReviewSpan();
+        this.address = storeRequestDto.getAddress();
+        this.name = storeRequestDto.getName();
         this.menu = menu;
         this.region = region;
         this.image = storeImage;
 
+    }
+
+    public void update(StoreRequestDto storeRequestDto, Menu menu, Region region, String storeImage) {
+        this.title = storeRequestDto.getTitle();
+        this.subTitle = storeRequestDto.getSubTitle();
+        this.useInfo = storeRequestDto.getUseInfo();
+        this.saleInfo = storeRequestDto.getSaleInfo();
+        this.placeInfo = storeRequestDto.getPlaceInfo();
+        this.sponInfo = storeRequestDto.getSponInfo();
+        this.serviceInfo = storeRequestDto.getServiceInfo();
+        this.reviewSpan = storeRequestDto.getReviewSpan();
+        this.address = storeRequestDto.getAddress();
+        this.name = storeRequestDto.getName();
+        this.menu = menu;
+        this.region = region;
+        this.image = storeImage;
     }
 
 }
