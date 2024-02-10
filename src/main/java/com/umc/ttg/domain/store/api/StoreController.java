@@ -116,4 +116,16 @@ public class StoreController {
 
     }
 
+    @PostMapping("/{store-id}/heart")
+    public BaseResponseDto<HeartStoreResponseDto> insertHeartStore (@PathVariable("store-id") Long storeId) {
+
+        return storeCommandService.insertHeart(storeId);
+    }
+
+    @DeleteMapping("/{store-id}/heart")
+    public BaseResponseDto<HeartStoreResponseDto> deleteHeartStore (@PathVariable("store-id") Long storeId) {
+
+        return storeCommandService.deleteHeart(storeId);
+    }
+
 }

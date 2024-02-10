@@ -2,17 +2,14 @@ package com.umc.ttg.domain.member.entity;
 
 import com.umc.ttg.domain.store.entity.Store;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @AllArgsConstructor @NoArgsConstructor
 @DynamicInsert @DynamicUpdate
 @Getter @Setter
-@Entity
+@Entity @Builder
 public class HeartStore {
 
     @Id

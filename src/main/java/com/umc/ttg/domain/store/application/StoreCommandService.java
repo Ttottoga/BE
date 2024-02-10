@@ -22,4 +22,8 @@ public interface StoreCommandService {
 
     BaseResponseDto<StoreResponseDto> updateStore(StoreRequestDto storeRequestDto, Long storeId) throws IOException;
 
+    BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId);
+
+    BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId);
+
 }
