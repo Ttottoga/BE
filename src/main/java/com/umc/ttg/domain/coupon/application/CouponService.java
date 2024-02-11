@@ -10,4 +10,5 @@ import java.util.List;
 public interface CouponService {
     BaseResponseDto<List<CouponResponseDto>> getAllCoupons(Long memberId);
     BaseResponseDto<CouponResponseDto> getCouponDetails(Long memberId, Long couponId) throws IOException, WriterException;
+    BaseResponseDto<String> useCoupon(Long memberId, Long couponId);
 }

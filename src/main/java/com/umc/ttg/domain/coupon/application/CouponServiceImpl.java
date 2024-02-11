@@ -2,6 +2,7 @@ package com.umc.ttg.domain.coupon.application;
 
 import com.google.zxing.WriterException;
 import com.umc.ttg.domain.coupon.dto.CouponResponseDto;
+import com.umc.ttg.domain.coupon.dto.converter.CouponConverter;
 import com.umc.ttg.domain.coupon.entity.Coupon;
 import com.umc.ttg.domain.coupon.exception.handler.CouponHandler;
 import com.umc.ttg.domain.coupon.repository.CouponRepository;
@@ -12,6 +13,7 @@ import com.umc.ttg.global.common.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,16 +38,35 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public BaseResponseDto<CouponResponseDto> getCouponDetails(Long memberId, Long couponId) throws IOException, WriterException {
-        Coupon foundCoupon = couponRepository.findByIdAndMemberId(couponId, getMember(memberId).getId())
-                .orElseThrow(() -> new CouponHandler(ResponseCode.COUPON_NOT_FOUND));
+        Coupon coupon = getCoupon(memberId, couponId);
 
-        return BaseResponseDto.onSuccess(CouponResponseDto.of(foundCoupon), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(CouponResponseDto.of(coupon), ResponseCode.OK);
     }
+
+    @Override
+    @Transactional
+    public BaseResponseDto<String> useCoupon(Long memberId, Long couponId) {
+        Coupon coupon = getCoupon(memberId, couponId);
+
+        // 직원 확인
+        if (coupon.getStatusYn().equals('Y')) {
+            coupon.updateStatus('N');
+        }
+
+        return BaseResponseDto.onSuccess(CouponConverter.convertToCouponUsage(coupon), ResponseCode.OK);
+    }
+
 
     private Member getMember(Long memberId) {
         Member foundMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CouponHandler(ResponseCode.MEMBER_NOT_FOUND));
         return foundMember;
+    }
+
+    private Coupon getCoupon(Long memberId, Long couponId) {
+        Coupon foundCoupon = couponRepository.findByIdAndMemberId(couponId, getMember(memberId).getId())
+                .orElseThrow(() -> new CouponHandler(ResponseCode.COUPON_NOT_FOUND));
+        return foundCoupon;
     }
 
 }

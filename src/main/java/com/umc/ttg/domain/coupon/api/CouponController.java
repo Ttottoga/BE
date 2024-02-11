@@ -5,10 +5,7 @@ import com.umc.ttg.domain.coupon.application.CouponService;
 import com.umc.ttg.domain.coupon.dto.CouponResponseDto;
 import com.umc.ttg.global.common.BaseResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +26,11 @@ public class CouponController {
     @GetMapping("/{member-id}/{coupon-id}")
     public BaseResponseDto<CouponResponseDto> CouponDetailsGet(@PathVariable("member-id") Long memberId, @PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
         return couponService.getCouponDetails(memberId, couponId);
+    }
+
+    @PutMapping("/{member-id}/{coupon-id}/check")
+    public BaseResponseDto<String> CouponUse(@PathVariable("member-id") Long memberId, @PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
+        return couponService.useCoupon(memberId, couponId);
     }
 
 }
