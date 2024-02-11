@@ -17,20 +17,19 @@ public class CouponController {
 
     private final CouponService couponService;
 
-    // 로그인 구현 전 임시로 pathvariable 통해 사용자 확인
-    @GetMapping("/{member-id}")
-    public BaseResponseDto<List<CouponResponseDto>> allCouponsGet(@PathVariable("member-id") Long id) {
-        return couponService.getAllCoupons(id);
+    @GetMapping
+    public BaseResponseDto<List<CouponResponseDto>> allCouponsGet() {
+        return couponService.getAllCoupons();
     }
 
-    @GetMapping("/{member-id}/{coupon-id}")
-    public BaseResponseDto<CouponResponseDto> CouponDetailsGet(@PathVariable("member-id") Long memberId, @PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
-        return couponService.getCouponDetails(memberId, couponId);
+    @GetMapping("/{coupon-id}")
+    public BaseResponseDto<CouponResponseDto> CouponDetailsGet(@PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
+        return couponService.getCouponDetails(couponId);
     }
 
-    @PutMapping("/{member-id}/{coupon-id}/check")
-    public BaseResponseDto<String> CouponUse(@PathVariable("member-id") Long memberId, @PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
-        return couponService.useCoupon(memberId, couponId);
+    @PutMapping("/{coupon-id}/check")
+    public BaseResponseDto<String> CouponUse(@PathVariable("coupon-id") Long couponId) throws IOException, WriterException {
+        return couponService.useCoupon(couponId);
     }
 
 }

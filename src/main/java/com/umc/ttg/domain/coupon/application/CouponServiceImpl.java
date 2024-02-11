@@ -28,7 +28,9 @@ public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
 
     @Override
-    public BaseResponseDto<List<CouponResponseDto>> getAllCoupons(Long memberId) {
+    public BaseResponseDto<List<CouponResponseDto>> getAllCoupons() {
+        // 로그인 구현 전 임시 멤버 ID
+        Long memberId = 1L;
         List<CouponResponseDto> couponResponseDtos = couponRepository
                 .findAllByMemberId(getMember(memberId).getId())
                 .stream().map(CouponResponseDto::of)
@@ -37,7 +39,9 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public BaseResponseDto<CouponResponseDto> getCouponDetails(Long memberId, Long couponId) throws IOException, WriterException {
+    public BaseResponseDto<CouponResponseDto> getCouponDetails(Long couponId) throws IOException, WriterException {
+        // 로그인 구현 전 임시 멤버 ID
+        Long memberId = 1L;
         Coupon coupon = getCoupon(memberId, couponId);
 
         return BaseResponseDto.onSuccess(CouponResponseDto.of(coupon), ResponseCode.OK);
@@ -45,7 +49,9 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public BaseResponseDto<String> useCoupon(Long memberId, Long couponId) {
+    public BaseResponseDto<String> useCoupon(Long couponId) {
+        // 로그인 구현 전 임시 멤버 ID
+        Long memberId = 1L;
         Coupon coupon = getCoupon(memberId, couponId);
 
         // 직원 확인
