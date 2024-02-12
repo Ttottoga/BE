@@ -15,4 +15,9 @@ public class CouponConverter {
                 .content(coupon.getContent())
                 .build();
     }
+
+    public static String convertToCouponUsage(Coupon coupon) {
+
+        return coupon.getId() + "번 쿠폰 사용 완료";
+    }
 }

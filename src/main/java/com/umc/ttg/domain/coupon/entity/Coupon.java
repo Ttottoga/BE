@@ -42,7 +42,7 @@ public class Coupon extends Time {
     private LocalDate endDate;
 
     @Column(nullable = false, length = 1)
-    @ColumnDefault("'n'")
+    @ColumnDefault("'N'")
     private Character statusYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -78,5 +78,9 @@ public class Coupon extends Time {
                 .member(member)
                 .store(store)
                 .build();
+    }
+
+    public void updateStatus(Character statusYn) {
+        this.statusYn = statusYn;
     }
 }
