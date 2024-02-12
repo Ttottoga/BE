@@ -15,7 +15,8 @@ public class Member extends Time {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    // Kakao_userId || Naver_userId 가 저장됨
+    @Column(nullable = false, length = 30)
     private String name;
 
     @Column(nullable = false, length = 20)
@@ -26,19 +27,36 @@ public class Member extends Time {
     @Column(length = 15)
     private String phoneNum;
 
-    @Column(nullable = false, length = 30)
-    private String email;
-
     @Column(nullable = false)
     private int benefitCount;
 
+//     For Spring Security
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
+    private String role;
+
     @Builder
-    public Member(String name, String nickname, String profileImage, String phoneNum, String email, int benefitCount) {
+    public Member(String name, String nickname, String profileImage, String phoneNum, int benefitCount) {
         this.name = name;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.phoneNum = phoneNum;
-        this.email = email;
         this.benefitCount = benefitCount;
+    }
+
+    public Member (String userId, String nickname, String profileImage, String type) {
+        this.name = userId;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.phoneNum = null;
+        this.benefitCount = 0;
+        this.password = "Passw0rd";
+        this.type = type;
+        this.role = "ROLE_USER";
     }
 }
