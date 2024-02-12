@@ -58,6 +58,8 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
 
+        validatePageAndSize(page, size);
+
         Member member = validateCorrectMember(memberId);
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
 
@@ -83,6 +85,8 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     @Override
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
 
+        validatePageAndSize(page, size);
+
         Member member = validateCorrectMember(memberId);
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode.MENU_NOT_FOUND));
 
@@ -107,6 +111,8 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     @Override
     public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
+
+        validatePageAndSize(page, size);
 
         String correctKeyword = validateCorrectKeyword(keyword);
 
@@ -171,6 +177,12 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
         return memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
+    }
+
+    private void validatePageAndSize(int page, int size) {
+        if(page < 0 || size < 0) {
+            throw new StoreHandler(ResponseCode.PAGE_AND_SIZE_NOT_CORRECT);
+        }
     }
 
     @Override
