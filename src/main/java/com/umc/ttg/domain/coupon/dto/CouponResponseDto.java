@@ -14,17 +14,19 @@ public class CouponResponseDto {
     private String name;
     private String subtitle;
     private Character useYn;
-    private String imageUrl;
+    private String qrCode;
+    private String storeImage;
     private LocalDate startDate;
     private LocalDate endDate;
 
     @Builder
-    private CouponResponseDto(Long id, String name, String subtitle, Character useYn, String imageUrl, LocalDate startDate, LocalDate endDate) {
+    public CouponResponseDto(Long id, String name, String subtitle, Character useYn, String qrCode, String storeImage, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.name = name;
         this.subtitle = subtitle;
         this.useYn = useYn;
-        this.imageUrl = imageUrl;
+        this.qrCode = qrCode;
+        this.storeImage = storeImage;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -35,7 +37,8 @@ public class CouponResponseDto {
                 .name(coupon.getName())
                 .subtitle(coupon.getContent())
                 .useYn(coupon.getStatusYn())
-                .imageUrl(coupon.getImageUrl())
+                .qrCode(coupon.getQrCode())
+                .storeImage(coupon.getImageUrl())
                 .startDate(coupon.getStartDate())
                 .endDate(coupon.getEndDate())
                 .build();

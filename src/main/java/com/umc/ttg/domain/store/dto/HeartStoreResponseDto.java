@@ -2,15 +2,13 @@ package com.umc.ttg.domain.store.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
-@NoArgsConstructor
+@Data @Builder
 @AllArgsConstructor
-public class StoreCreateResponseDto {
+@NoArgsConstructor
+public class HeartStoreResponseDto {
 
-    private Long storeId;
-
+    Long id;
 }

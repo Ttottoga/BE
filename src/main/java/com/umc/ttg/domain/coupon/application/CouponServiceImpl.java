@@ -5,7 +5,6 @@ import com.umc.ttg.domain.coupon.dto.CouponResponseDto;
 import com.umc.ttg.domain.coupon.entity.Coupon;
 import com.umc.ttg.domain.coupon.exception.handler.CouponHandler;
 import com.umc.ttg.domain.coupon.repository.CouponRepository;
-import com.umc.ttg.domain.coupon.utils.QrCodeGenerator;
 import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.repository.MemberRepository;
 import com.umc.ttg.global.common.BaseResponseDto;
@@ -26,9 +25,6 @@ public class CouponServiceImpl implements CouponService {
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
 
-
-    // 추후 리뷰 상태 변경 구현 완료 후, reviewStatus == "SUCCESS"인 부분 확인하여 쿠폰 객체 추가
-
     @Override
     public BaseResponseDto<List<CouponResponseDto>> getAllCoupons(Long memberId) {
         List<CouponResponseDto> couponResponseDtos = couponRepository
@@ -42,8 +38,6 @@ public class CouponServiceImpl implements CouponService {
     public BaseResponseDto<CouponResponseDto> getCouponDetails(Long memberId, Long couponId) throws IOException, WriterException {
         Coupon foundCoupon = couponRepository.findByIdAndMemberId(couponId, getMember(memberId).getId())
                 .orElseThrow(() -> new CouponHandler(ResponseCode.COUPON_NOT_FOUND));
-
-        QrCodeGenerator.generateQrCode(foundCoupon);
 
         return BaseResponseDto.onSuccess(CouponResponseDto.of(foundCoupon), ResponseCode.OK);
     }

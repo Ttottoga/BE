@@ -37,6 +37,8 @@ dependencies {
     // QrCode
     implementation 'com.google.zxing:core:3.5.0'
     implementation 'com.google.zxing:javase:3.5.0'
+
+    implementation("commons-io:commons-io:2.11.0")
 }
 
 tasks.named('test') {

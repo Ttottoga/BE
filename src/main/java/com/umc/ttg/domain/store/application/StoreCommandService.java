@@ -8,6 +8,12 @@ import java.io.IOException;
 
 public interface StoreCommandService {
 
-    BaseResponseDto<StoreCreateResponseDto> saveStore(StoreCreateRequestDto storeCreateRequestDto) throws IOException;
+    BaseResponseDto<StoreResponseDto> saveStore(StoreRequestDto storeRequestDto) throws IOException;
+
+    BaseResponseDto<StoreResponseDto> updateStore(StoreRequestDto storeRequestDto, Long storeId) throws IOException;
+
+    BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId);
+
+    BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId);
 
 }
