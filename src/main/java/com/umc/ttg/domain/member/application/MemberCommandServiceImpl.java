@@ -13,6 +13,7 @@ import com.umc.ttg.global.util.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final AwsS3Service awsS3Service;
 
     @Override
+    @Transactional
     public BaseResponseDto<MemberImageResponseDTO> updateImage(MemberImageRequestDTO memberImageRequestDTO) throws IOException {
 
         // 로그인 구현되면 시큐리티에서 member 가져올 예정
