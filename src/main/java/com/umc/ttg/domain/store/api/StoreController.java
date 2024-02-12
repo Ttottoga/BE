@@ -5,7 +5,6 @@ import com.umc.ttg.domain.store.application.StoreQueryService;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,8 +50,8 @@ public class StoreController {
      */
     @GetMapping("/region-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
-                                                                                 @RequestParam @PositiveOrZero int page,
-                                                                                 @RequestParam @PositiveOrZero int size) {
+                                                                                 @RequestParam Optional<Integer> page,
+                                                                                 @RequestParam Optional<Integer> size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
@@ -60,14 +59,14 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page.orElse(0), size.orElse(20), memberId);
 
     }
 
     @GetMapping("/menu-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
-                                                                             @RequestParam @PositiveOrZero int page,
-                                                                             @RequestParam @PositiveOrZero int size) {
+                                                                             @RequestParam Optional<Integer> page,
+                                                                             @RequestParam Optional<Integer> size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
@@ -75,7 +74,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page.orElse(0), size.orElse(20), memberId);
 
     }
 
@@ -96,8 +95,8 @@ public class StoreController {
 
     @GetMapping("/search")
     public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
-                                                                     @RequestParam @PositiveOrZero int page,
-                                                                     @RequestParam @PositiveOrZero int size) {
+                                                                     @RequestParam Optional<Integer> page,
+                                                                     @RequestParam Optional<Integer> size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
@@ -105,7 +104,7 @@ public class StoreController {
          */
         Long memberId = 2L;
 
-        return storeQueryService.searchStore(keyword, page, size, memberId);
+        return storeQueryService.searchStore(keyword, page.orElse(0), size.orElse(20), memberId);
 
     }
 
