@@ -81,6 +81,7 @@ public class StoreConverter {
 
         MyPageStoreResponseDto storeResponseDto = MyPageStoreResponseDto.builder()
                 .storeId(store.getId())
+                .name(store.getName())
                 .title(store.getTitle())
                 .image(store.getImage())
                 .build();

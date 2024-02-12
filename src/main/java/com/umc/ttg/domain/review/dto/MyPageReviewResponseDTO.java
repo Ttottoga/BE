@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class MyPageReviewResponseDTO {
 
     private Long reviewId;
+    private String reviewLink;
     private ReviewStatus status;
     private LocalDate applyDate;
     private String reason;
@@ -27,6 +28,7 @@ public class MyPageReviewResponseDTO {
 
         return MyPageReviewResponseDTO.builder()
                 .reviewId(review.getId())
+                .reviewLink(review.getReviewLink())
                 .status(review.getStatus())
                 .applyDate(review.getApplyDate())
                 .reason(review.getReason())
@@ -35,8 +37,9 @@ public class MyPageReviewResponseDTO {
     }
 
     @Builder
-    private MyPageReviewResponseDTO(Long reviewId, ReviewStatus status, LocalDate applyDate, String reason, MyPageStoreResponseDto storeDto) {
+    private MyPageReviewResponseDTO(Long reviewId, String reviewLink, ReviewStatus status, LocalDate applyDate, String reason, MyPageStoreResponseDto storeDto) {
         this.reviewId = reviewId;
+        this.reviewLink = reviewLink;
         this.status = status;
         this.applyDate = applyDate;
         this.reason = reason;
