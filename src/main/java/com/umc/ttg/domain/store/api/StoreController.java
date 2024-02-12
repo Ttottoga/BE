@@ -1,6 +1,7 @@
 package com.umc.ttg.domain.store.api;
 
 import com.umc.ttg.domain.store.application.StoreCommandService;
+import com.umc.ttg.domain.store.application.StoreQueryService;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class StoreController {
 
     private final StoreCommandService storeCommandService;
+    private final StoreQueryService storeQueryService;
 
     @PostMapping
     public BaseResponseDto<StoreResponseDto> createStore(@ModelAttribute @Valid StoreRequestDto storeRequestDto) throws IOException {
@@ -34,10 +36,11 @@ public class StoreController {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStore(storeId, memberId);
+        return storeQueryService.findStore(storeId, memberId);
 
     }
 
@@ -47,30 +50,32 @@ public class StoreController {
      * @return
      */
     @GetMapping("/region-categories")
-    public BaseResponseDto<Page<StoreFindByRegionResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
-                                                                                 @RequestParam int page,
-                                                                                 @RequestParam int size) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
+                                                                                 @RequestParam @PositiveOrZero int page,
+                                                                                 @RequestParam @PositiveOrZero int size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page, size, memberId);
 
     }
 
     @GetMapping("/menu-categories")
-    public BaseResponseDto<Page<StoreFindByMenuResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
-                                                                             @RequestParam int page,
-                                                                             @RequestParam int size) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
+                                                                             @RequestParam @PositiveOrZero int page,
+                                                                             @RequestParam @PositiveOrZero int size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
-        return storeCommandService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
+        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page, size, memberId);
 
     }
 
@@ -78,29 +83,29 @@ public class StoreController {
     public BaseResponseDto<HomeResponseDto> home() {
 
         /**
-         * 여기에 토큰으로부터 MemberId 로직 들어갈 것
+         * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
 
         // Test MemberId
-        Long testMemberId = 2L;
+        Long memberId = 2L;
 
-        BaseResponseDto<HomeResponseDto> home = storeCommandService.getHome(testMemberId);
-
-        return home;
+        return storeQueryService.getHome(memberId);
 
     }
 
     @GetMapping("/search")
-    public BaseResponseDto<Page<StoreSearchResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
+    public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
                                                                      @RequestParam @PositiveOrZero int page,
                                                                      @RequestParam @PositiveOrZero int size) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
+         * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
         Long memberId = 2L;
 
-        return storeCommandService.searchStore(keyword, page, size, memberId);
+        return storeQueryService.searchStore(keyword, page, size, memberId);
 
     }
 

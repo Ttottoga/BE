@@ -19,7 +19,7 @@ public class StoreFindResponseDto {
     private String menuName;
     private String serviceInfo;
     private int reviewSpan;
-    private char heartStore;
+    private boolean heartStore;
     private String useInfo;
     private String saleInfo;
     private String placeInfo;
