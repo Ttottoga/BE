@@ -16,7 +16,7 @@ public class Member extends Time {
     private Long id;
 
     // Kakao_userId || Naver_userId 가 저장됨
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, length = 20)

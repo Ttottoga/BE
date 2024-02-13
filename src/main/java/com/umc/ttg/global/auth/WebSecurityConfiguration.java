@@ -47,9 +47,9 @@ public class WebSecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**", "oauth2/**", "/h2-console").permitAll()
-//                        .anyRequest().hasRole("USER")
-                                .anyRequest().permitAll()
+                        .requestMatchers("/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**").permitAll()
+                        .anyRequest().hasRole("USER")
+//                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
@@ -71,9 +71,11 @@ public class WebSecurityConfiguration {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
+//        corsConfiguration.setAllowCredentials(true);
 
+        // cors 로그인 부분 제외
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/v1/**", corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
     }

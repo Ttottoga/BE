@@ -1,12 +1,16 @@
 package com.umc.ttg.global.auth.jwt;
 
+import com.umc.ttg.domain.member.application.MemberService;
 import com.umc.ttg.domain.member.entity.Member;
+import com.umc.ttg.domain.member.exception.handler.MemberHandler;
 import com.umc.ttg.domain.member.repository.MemberRepository;
+import com.umc.ttg.global.common.ResponseCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,29 +28,24 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final JwtProvider jwtProvider;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token = parseBearerToken(request);
+            String userId = memberService.retrieveMemberId(request);
 
-            if (token == null) {
-                System.out.println("not have token!!!!");
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            String userId = jwtProvider.validate(token);
             if (userId == null) {
-                System.out.println("not have userId!!!!");
+                log.info("not have userId!!!!");
                 filterChain.doFilter(request, response);
                 return;
             }
-            System.out.println("Find token!!!![userId] : " + userId);
+            log.info("Find token!!!![userId] : " + userId);
 
-            Member member = memberRepository.findByName(userId);
+            Member member = memberService.findMemberByUsername(userId);
             String role = member.getRole();
 
             List<GrantedAuthority> authorities = new ArrayList<>();
@@ -62,23 +61,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.setContext(securityContext);
         }
         catch (Exception exception) {
-            exception.printStackTrace();
         }
 
 
         filterChain.doFilter(request, response);
-    }
-
-    private String parseBearerToken(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-
-        boolean hasAuthorization = StringUtils.hasText(authorization);
-        if(!hasAuthorization) return null;
-
-        boolean isBearer = authorization.startsWith("Bearer ");
-        if(!isBearer) return null;
-
-        String token = authorization.substring(7);
-        return token;
     }
 }
