@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -38,13 +39,22 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.addHeader("X-AUTH-TOKEN", accessToken);
 
         // 쿠키로 값 받아와지는지??
-        Cookie cookie = new Cookie("access_token", accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(60);
+        ResponseCookie responseCookie = ResponseCookie.from("access_token", accessToken)
+                .path("/")
+                .sameSite("None")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(60)
+                .build();
 
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("access_token", accessToken);
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+//        cookie.setMaxAge(60);
+
+        response.addHeader("Set-Cookie", responseCookie.toString());
+//        response.addCookie(cookie);
         response.sendRedirect("http://localhost:3000/auth/oauth-response/");
     }
 
