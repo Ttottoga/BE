@@ -40,7 +40,7 @@ public class StoreController {
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        String memberName = memberService.retrieveName(request);
+        String memberName = memberService.permitAllAccess(request);
 
         return storeQueryService.findStore(storeId, memberName);
 
@@ -60,7 +60,7 @@ public class StoreController {
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        String memberName = memberService.retrieveName(request);
+        String memberName = memberService.permitAllAccess(request);
 
         return storeQueryService.findStoreByRegion(regionId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
 
@@ -75,7 +75,7 @@ public class StoreController {
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        String memberName = memberService.retrieveName(request);
+        String memberName = memberService.permitAllAccess(request);
 
         return storeQueryService.findStoreByMenu(menuId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
 
@@ -90,7 +90,7 @@ public class StoreController {
          */
 
         // Test MemberId
-        String memberName = memberService.retrieveName(request);
+        String memberName = memberService.permitAllAccess(request);
 
         return storeQueryService.getHome(memberName);
 
@@ -105,7 +105,7 @@ public class StoreController {
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        String memberName = memberService.retrieveName(request);
+        String memberName = memberService.permitAllAccess(request);
 
         return storeQueryService.searchStore(keyword, page.orElse(0), size.orElse(20), memberName);
 

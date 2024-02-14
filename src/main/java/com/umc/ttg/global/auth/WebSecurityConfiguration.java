@@ -34,6 +34,8 @@ public class WebSecurityConfiguration {
     private final DefaultOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    private String[] permitAllUri = {"/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**", "/stores/{store_id}", "/stores", "/stores/home", "/stores/region-categories/**", "/stores/menu-categories/**", "/stores/search/**"};
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -47,7 +49,7 @@ public class WebSecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**").permitAll()
+                        .requestMatchers(permitAllUri).permitAll()
                         .anyRequest().hasRole("USER")
 //                        .anyRequest().permitAll()
                 )
