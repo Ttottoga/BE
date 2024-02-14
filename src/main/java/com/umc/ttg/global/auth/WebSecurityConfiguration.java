@@ -47,7 +47,7 @@ public class WebSecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**", "/stores", "/stores/home", "/stores/region-categories/**", "/stores/menu-categories/**", "/stores/search/**").permitAll()
                         .anyRequest().hasRole("USER")
 //                        .anyRequest().permitAll()
                 )
