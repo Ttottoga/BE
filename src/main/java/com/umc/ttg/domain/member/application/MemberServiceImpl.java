@@ -35,27 +35,27 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Transactional(readOnly = true)
-    public Member findMemberByUsername(String username) {
-        return memberRepository.findByName(username).orElse(null);
+    public Member findMemberByName(String name) {
+        return memberRepository.findByName(name).orElse(null);
     }
 
-    public String retrieveMemberId(HttpServletRequest request) {
+    public String retrieveName(HttpServletRequest request) {
 
         String hasPrefixAccessToken = tokenParser.parseBearerToken(request);
 
-        String memberId = null;
+        String name = null;
         if (hasPrefixAccessToken.startsWith("kakao_")) {
             String accessToken = hasPrefixAccessToken.substring(6);
-            memberId = "kakao_" + tokenPrefixKakao(accessToken);
+            name = "kakao_" + tokenPrefixKakao(accessToken);
         }
         else if (hasPrefixAccessToken.startsWith("naver_")) {
             String accessToken = hasPrefixAccessToken.substring(6);
-            memberId = "naver_" + tokenPrefixNaver(accessToken);
+            name = "naver_" + tokenPrefixNaver(accessToken);
         }
         else
             throw new MemberHandler(ResponseCode.TOKEN_PREFIX_VALUE_EXCEPTION);
 
-        return memberId;
+        return name;
     }
 
     private String tokenPrefixNaver(String accessToken) {

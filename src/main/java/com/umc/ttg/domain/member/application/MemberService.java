@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface MemberService {
     public List<Member> findAll();
-    public Member findMemberByUsername(String username);
-    public String retrieveMemberId(HttpServletRequest request);
+    public Member findMemberByName(String name);
+    public String retrieveName(HttpServletRequest request);
 }

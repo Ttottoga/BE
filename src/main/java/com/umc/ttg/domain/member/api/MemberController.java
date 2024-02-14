@@ -1,6 +1,5 @@
 package com.umc.ttg.domain.member.api;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.umc.ttg.domain.member.application.MemberCommandService;
 import com.umc.ttg.domain.member.application.MemberQueryService;
 import com.umc.ttg.domain.member.application.MemberService;
@@ -8,7 +7,6 @@ import com.umc.ttg.domain.member.dto.MemberImageRequestDTO;
 import com.umc.ttg.domain.member.dto.MemberImageResponseDTO;
 import com.umc.ttg.domain.member.dto.MyPageAllResponseDto;
 import com.umc.ttg.domain.member.entity.Member;
-import com.umc.ttg.global.auth.jwt.JwtAuthenticationFilter;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,8 +41,8 @@ public class MemberController {
 
     @GetMapping
     public BaseResponseDto<Member> retrieveMember(HttpServletRequest request) {
-        String memberId = memberService.retrieveMemberId(request);
-        Member member = memberService.findMemberByUsername(memberId);
+        String name = memberService.retrieveName(request);
+        Member member = memberService.findMemberByName(name);
 
         return BaseResponseDto.onSuccess(member, ResponseCode.OK);
     }
@@ -58,6 +56,6 @@ public class MemberController {
     // for server confirmation
     @GetMapping("/id")
     public BaseResponseDto retrieveAccessTokenInfo(HttpServletRequest request) {
-        return BaseResponseDto.onSuccess(memberService.retrieveMemberId(request), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(memberService.retrieveName(request), ResponseCode.OK);
     }
 }

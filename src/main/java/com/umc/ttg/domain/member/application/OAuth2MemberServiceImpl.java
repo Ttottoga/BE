@@ -1,17 +1,13 @@
 package com.umc.ttg.domain.member.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.umc.ttg.domain.member.entity.CustomOAuth2Member;
 import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -62,12 +58,13 @@ public class OAuth2MemberServiceImpl extends DefaultOAuth2UserService {
             // 있으면, 데이터 update 후 로그인
             // 없으면, 회원가입 후 로그인
 
-        if(memberService.findMemberByUsername(member.getName()) == null) {
+
+        if(memberService.findMemberByName(member.getName()) == null) {
             memberRepository.save(member);
         }
-        else {
+//        else {
 //            memberService.update();
-        }
+//        }
 
         if (refreshToken == null) return new CustomOAuth2Member(oauthClientName + "_" + accessToken, null);
         else return new CustomOAuth2Member(oauthClientName + "_" + accessToken, oauthClientName + "_" + refreshToken);
