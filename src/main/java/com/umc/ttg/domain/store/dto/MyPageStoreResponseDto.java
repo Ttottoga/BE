@@ -13,6 +13,7 @@ public class MyPageStoreResponseDto {
 
     private Long storeId;
     private String title;
+    private String name;
     private String image;
     private MyPageCouponResponseDTO couponDto;
 }

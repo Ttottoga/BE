@@ -257,7 +257,6 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         return memberRepository.save(Member.builder()
                 .name("test")
                 .nickname("ddd")
-                .email("test@gmail.com")
                 .profileImage("ddd")
                 .phoneNum("010")
                 .benefitCount(0)
