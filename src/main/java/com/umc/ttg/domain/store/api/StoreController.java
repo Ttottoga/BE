@@ -1,9 +1,11 @@
 package com.umc.ttg.domain.store.api;
 
+import com.umc.ttg.domain.member.application.MemberService;
 import com.umc.ttg.domain.store.application.StoreCommandService;
 import com.umc.ttg.domain.store.application.StoreQueryService;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.global.common.BaseResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class StoreController {
 
     private final StoreCommandService storeCommandService;
     private final StoreQueryService storeQueryService;
+    private final MemberService memberService;
 
     @PostMapping
     public BaseResponseDto<StoreResponseDto> createStore(@ModelAttribute @Valid StoreRequestDto storeRequestDto) throws IOException {
@@ -31,15 +34,15 @@ public class StoreController {
     }
 
     @GetMapping("/{store-id}")
-    public BaseResponseDto<StoreFindResponseDto> findStore(@PathVariable("store-id") Long storeId) {
+    public BaseResponseDto<StoreFindResponseDto> findStore(@PathVariable("store-id") Long storeId, HttpServletRequest request) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        Long memberId = 2L;
+        String memberName = memberService.retrieveName(request);
 
-        return storeQueryService.findStore(storeId, memberId);
+        return storeQueryService.findStore(storeId, memberName);
 
     }
 
@@ -51,35 +54,35 @@ public class StoreController {
     @GetMapping("/region-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
                                                                                  @RequestParam Optional<Integer> page,
-                                                                                 @RequestParam Optional<Integer> size) {
+                                                                                 @RequestParam Optional<Integer> size, HttpServletRequest request) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        Long memberId = 2L;
+        String memberName = memberService.retrieveName(request);
 
-        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page.orElse(0), size.orElse(20), memberId);
+        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
 
     }
 
     @GetMapping("/menu-categories")
     public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(@RequestParam Optional<Long> menuId,
                                                                              @RequestParam Optional<Integer> page,
-                                                                             @RequestParam Optional<Integer> size) {
+                                                                             @RequestParam Optional<Integer> size, HttpServletRequest request) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        Long memberId = 2L;
+        String memberName = memberService.retrieveName(request);
 
-        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page.orElse(0), size.orElse(20), memberId);
+        return storeQueryService.findStoreByMenu(menuId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
 
     }
 
     @GetMapping("/home")
-    public BaseResponseDto<HomeResponseDto> home() {
+    public BaseResponseDto<HomeResponseDto> home(HttpServletRequest request) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
@@ -87,24 +90,24 @@ public class StoreController {
          */
 
         // Test MemberId
-        Long memberId = 2L;
+        String memberName = memberService.retrieveName(request);
 
-        return storeQueryService.getHome(memberId);
+        return storeQueryService.getHome(memberName);
 
     }
 
     @GetMapping("/search")
     public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(@RequestParam(value = "keyword", required = false) String keyword,
                                                                      @RequestParam Optional<Integer> page,
-                                                                     @RequestParam Optional<Integer> size) {
+                                                                     @RequestParam Optional<Integer> size, HttpServletRequest request) {
 
         /**
          * Header 토큰에서 멤버 ID 받아오는 로직 추가 예정
          * Header 에서 Barer token 이 없을 경우 null 을 반환하는 로직 추가
          */
-        Long memberId = 2L;
+        String memberName = memberService.retrieveName(request);
 
-        return storeQueryService.searchStore(keyword, page.orElse(0), size.orElse(20), memberId);
+        return storeQueryService.searchStore(keyword, page.orElse(0), size.orElse(20), memberName);
 
     }
 
