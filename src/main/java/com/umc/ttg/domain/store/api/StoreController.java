@@ -123,6 +123,17 @@ public class StoreController {
 
     }
 
+    @GetMapping("/heart")
+    public BaseResponseDto<Page<StoreResultResponseDto>> findHeartStores(@RequestParam Optional<Integer> page,
+                                                                         @RequestParam Optional<Integer> size,
+                                                                         HttpServletRequest request) {
+
+        String memberName = memberService.retrieveName(request);
+
+        return storeQueryService.getHeartStores(page.orElse(0), size.orElse(20), memberName);
+
+    }
+
     @PostMapping("/{store-id}/heart")
     public BaseResponseDto<HeartStoreResponseDto> insertHeartStore (@PathVariable("store-id") Long storeId) {
 

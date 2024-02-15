@@ -1,5 +1,6 @@
 package com.umc.ttg.domain.store.application;
 
+import com.umc.ttg.domain.member.entity.HeartStore;
 import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.repository.HeartStoreRepository;
 import com.umc.ttg.domain.member.repository.MemberRepository;
@@ -135,6 +136,30 @@ public class StoreQueryServiceImpl implements StoreQueryService {
         return paging(stores,pageable);
 
     }
+
+    @Override
+    public BaseResponseDto<Page<StoreResultResponseDto>> getHeartStores(int page, int size, String memberName) {
+
+        Member member = validateCorrectMember(memberName);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return BaseResponseDto.onSuccess(getPagingHeartStores(member, pageable), ResponseCode.OK);
+
+    }
+
+    private Page<StoreResultResponseDto> getPagingHeartStores(Member member, Pageable pageable) {
+
+        List<StoreResultResponseDto> heartStores = heartStoreRepository.findByMember(member)
+                .map(HeartStore::getStore)
+                .stream().sorted(comparator())
+                .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
+                        store.getImage(), store.getServiceInfo(), store.getReviewCount(), true)).toList();
+
+        return paging(heartStores, pageable);
+
+    }
+
 
     /**
      * 공통 기능들
