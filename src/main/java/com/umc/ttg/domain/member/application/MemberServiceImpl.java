@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -56,6 +57,14 @@ public class MemberServiceImpl implements MemberService{
             throw new MemberHandler(ResponseCode.TOKEN_PREFIX_VALUE_EXCEPTION);
 
         return name;
+    }
+
+    public String permitAllAccess(HttpServletRequest request) {
+
+        String authorization = request.getHeader("Authorization");
+        if(!StringUtils.hasText(authorization)) return null;
+
+        return retrieveName(request);
     }
 
     private String tokenPrefixNaver(String accessToken) {

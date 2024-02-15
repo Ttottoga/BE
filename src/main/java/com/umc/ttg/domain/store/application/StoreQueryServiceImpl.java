@@ -37,9 +37,9 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     private final HeartStoreRepository heartStoreRepository;
 
     @Override
-    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, Long memberId) {
+    public BaseResponseDto<StoreFindResponseDto> findStore(Long storeId, String memberName) {
 
-        Member member = validateCorrectMember(memberId);
+        Member member = validateCorrectMember(memberName);
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
@@ -56,9 +56,11 @@ public class StoreQueryServiceImpl implements StoreQueryService {
      * 한 번의 요청마다 20개씩 넘겨줌(무한 스크롤 방식)
      */
     @Override
-    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, String memberName) {
 
-        Member member = validateCorrectMember(memberId);
+        validatePageAndSize(page, size);
+
+        Member member = validateCorrectMember(memberName);
         Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -81,9 +83,11 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     }
 
     @Override
-    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, String memberName) {
 
-        Member member = validateCorrectMember(memberId);
+        validatePageAndSize(page, size);
+
+        Member member = validateCorrectMember(memberName);
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new StoreHandler(ResponseCode.MENU_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
@@ -106,11 +110,13 @@ public class StoreQueryServiceImpl implements StoreQueryService {
     }
 
     @Override
-    public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, Long memberId) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, String memberName) {
+
+        validatePageAndSize(page, size);
 
         String correctKeyword = validateCorrectKeyword(keyword);
 
-        Member member = validateCorrectMember(memberId);
+        Member member = validateCorrectMember(memberName);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -163,21 +169,26 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     }
 
-    private Member validateCorrectMember(Long memberId) {
+    private Member validateCorrectMember(String memberName) {
 
-        if(memberId == null) {
+        if(memberName == null) {
             return null;
         }
 
-        return memberRepository.findById(memberId).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+        return memberRepository.findByName(memberName).orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
 
     }
 
-    @Override
-    public BaseResponseDto<HomeResponseDto> getHome(Long memberId) {
+    private void validatePageAndSize(int page, int size) {
+        if(page < 0 || size < 0) {
+            throw new StoreHandler(ResponseCode.PAGE_AND_SIZE_NOT_CORRECT);
+        }
+    }
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new StoreHandler(ResponseCode.MEMBER_NOT_FOUND));
+    @Override
+    public BaseResponseDto<HomeResponseDto> getHome(String memberName) {
+
+        Member member = validateCorrectMember(memberName);
 
         // top 15
         List<HomeResponseDto.Top15> top15 = getTop15(member);
