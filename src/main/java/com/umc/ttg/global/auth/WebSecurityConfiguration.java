@@ -35,7 +35,7 @@ public class WebSecurityConfiguration {
     private final DefaultOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    private String[] permitAllUri = {"/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**", "/stores/{store_id}", "/stores", "/stores/home", "/stores/region-categories/**", "/stores/menu-categories/**", "/stores/search/**"};
+    private String[] permitAllUri = {"/", "/api/v1/auth/**", "oauth2/**", "/h2-console/**", "/stores/{store-id}", "/stores", "/stores/home", "/stores/region-categories/**", "/stores/menu-categories/**", "/stores/search/**"};
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
@@ -43,10 +43,7 @@ public class WebSecurityConfiguration {
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource())
                 )
-//                .csrf(CsrfConfigurer::disable)
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                )
+                .csrf(CsrfConfigurer::disable)
                 .headers(header -> header.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
