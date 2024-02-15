@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,7 +44,8 @@ public class WebSecurityConfiguration {
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource())
                 )
-                .csrf(CsrfConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(CsrfConfigurer::disable)
 //                .csrf(csrf -> csrf
 //                        .ignoringRequestMatchers("/stores")
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
