@@ -41,6 +41,11 @@ public class WebSecurityConfiguration {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .authorizeHttpRequests(request -> request
+                                .requestMatchers(permitAllUri).permitAll()
+                                .anyRequest().hasRole("USER")
+//                        .anyRequest().permitAll()
+                )
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource())
                 )
@@ -54,11 +59,6 @@ public class WebSecurityConfiguration {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(permitAllUri).permitAll()
-                        .anyRequest().hasRole("USER")
-//                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
