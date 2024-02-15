@@ -43,7 +43,11 @@ public class WebSecurityConfiguration {
                 .cors(cors -> cors
                         .configurationSource(corsConfigurationSource())
                 )
-                .csrf(CsrfConfigurer::disable)
+//                .csrf(CsrfConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/stores")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                )
                 .headers(header -> header.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable()))
                 .httpBasic(HttpBasicConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement
