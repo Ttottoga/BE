@@ -9,4 +9,6 @@ public interface MemberService {
     public List<Member> findAll();
     public Member findMemberByName(String name);
     public String retrieveName(HttpServletRequest request);
+    String permitAllAccess(HttpServletRequest request);
+
 }
