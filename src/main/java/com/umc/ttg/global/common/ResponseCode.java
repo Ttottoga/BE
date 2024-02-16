@@ -27,6 +27,9 @@ public enum ResponseCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
+    // Review Error
+    REVIEW_ALREADY_FOUND(HttpStatus.BAD_REQUEST, "REVIEW4001", "지정된 리뷰의 개수를 초과했습니다."),
+
     // Token Error
     ACCESS_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "TOKEN4001", "헤더에 토큰 값이 없습니다"),
     TOKEN_PREFIX_VALUE_EXCEPTION(HttpStatus.BAD_REQUEST, "TOKEN4002", "토큰 prefix값이 잘못되었습니다 [kakao_ || naver_]"),
