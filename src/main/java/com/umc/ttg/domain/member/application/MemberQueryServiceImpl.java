@@ -10,6 +10,7 @@ import com.umc.ttg.domain.review.dto.MyPageReviewResponseDTO;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +24,17 @@ public class MemberQueryServiceImpl implements MemberQueryService {
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final ReviewRepository reviewRepository;
+    private final MemberService memberService;
 
     @Override
-    public BaseResponseDto<MyPageAllResponseDto> myPageLookUp() {
+    public BaseResponseDto<MyPageAllResponseDto> myPageLookUp(String memberName) {
 
-        /**
-         * 추후에 token을 통해 Member 정보를 가져올 예정
-         */
-        Long memberId = 1L;
+        //String memberName = request.getUserPrincipal().getName();
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
-        List<MyPageReviewResponseDTO> reviews = reviewRepository.findAllByMemberId(memberId)
+        List<MyPageReviewResponseDTO> reviews = reviewRepository.findAllByMemberName(memberName)
                 .stream().map(review -> MyPageReviewResponseDTO.of(review, couponRepository))
                 .collect(Collectors.toList());
 

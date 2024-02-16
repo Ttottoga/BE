@@ -12,8 +12,8 @@ public interface StoreCommandService {
 
     BaseResponseDto<StoreResponseDto> updateStore(StoreRequestDto storeRequestDto, Long storeId) throws IOException;
 
-    BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId);
+    BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId, String memberName);
 
-    BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId);
+    BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId, String memberName);
 
 }

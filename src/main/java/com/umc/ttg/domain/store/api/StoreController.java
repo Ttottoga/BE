@@ -135,15 +135,19 @@ public class StoreController {
     }
 
     @PostMapping("/{store-id}/heart")
-    public BaseResponseDto<HeartStoreResponseDto> insertHeartStore (@PathVariable("store-id") Long storeId) {
+    public BaseResponseDto<HeartStoreResponseDto> insertHeartStore (@PathVariable("store-id") Long storeId, HttpServletRequest request) {
 
-        return storeCommandService.insertHeart(storeId);
+        String memberName = memberService.retrieveName(request);
+
+        return storeCommandService.insertHeart(storeId, memberName);
     }
 
     @DeleteMapping("/{store-id}/heart")
-    public BaseResponseDto<HeartStoreResponseDto> deleteHeartStore (@PathVariable("store-id") Long storeId) {
+    public BaseResponseDto<HeartStoreResponseDto> deleteHeartStore (@PathVariable("store-id") Long storeId, HttpServletRequest request) {
 
-        return storeCommandService.deleteHeart(storeId);
+        String memberName = memberService.retrieveName(request);
+
+        return storeCommandService.deleteHeart(storeId, memberName);
     }
 
 }

@@ -8,5 +8,5 @@ import java.io.IOException;
 
 public interface MemberCommandService {
 
-    BaseResponseDto<MemberImageResponseDTO> updateImage(MemberImageRequestDTO memberImageRequestDTO) throws IOException;
+    BaseResponseDto<MemberImageResponseDTO> updateImage(MemberImageRequestDTO memberImageRequestDTO, String memberName) throws IOException;
 }

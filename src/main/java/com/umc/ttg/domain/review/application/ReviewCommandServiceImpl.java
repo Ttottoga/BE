@@ -19,6 +19,7 @@ import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
 import com.umc.ttg.global.util.AwsS3Service;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,15 +42,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
     @Override
     @Transactional
-    public BaseResponseDto<ReviewRegisterResponseDTO> save(Long storeId, ReviewRegisterRequestDTO reviewRegisterRequestDTO) throws IOException, WriterException {
-
-        // 로그인 구현되면 시큐리티에서 member 가져올 예정
-        Long memberId = 1L;
+    public BaseResponseDto<ReviewRegisterResponseDTO> save(Long storeId, ReviewRegisterRequestDTO reviewRegisterRequestDTO, String memberName) throws IOException, WriterException {
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new StoreHandler(ResponseCode.STORE_NOT_FOUND));
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Review review = new Review(store, member, reviewRegisterRequestDTO);
