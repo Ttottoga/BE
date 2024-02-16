@@ -10,7 +10,7 @@ import com.umc.ttg.domain.store.dto.StoreResponseDto;
 import com.umc.ttg.domain.store.dto.StoreFindResponseDto;
 import com.umc.ttg.domain.store.entity.Store;
 
-import java.util.Optional;
+import java.util.List;
 
 public class StoreConverter {
 
@@ -74,7 +74,7 @@ public class StoreConverter {
     /**
      * Store와 CouponRepository를 받아 storeDto와 couponDto를 반환하는 기능
      */
-    public static MyPageStoreResponseDto convertToMyStoreDto(Store store, CouponRepository couponRepository) {
+    public static MyPageStoreResponseDto convertToMyStoreDto(Long memberId, Store store, CouponRepository couponRepository) {
         if (store == null) {
             return null;
         }
@@ -87,10 +87,19 @@ public class StoreConverter {
                 .build();
 
         // Coupon 정보 설정
-        Optional<Coupon> optionalCoupon = couponRepository.findByStoreId(store.getId());
+        /*
+        Optional<Coupon> optionalCoupon = couponRepository.findByMemberIdAndStoreId(memberId, store.getId());
 
         if (optionalCoupon.isPresent()) {
             MyPageCouponResponseDTO couponResponseDTO = CouponConverter.convertToMyCouponDto(optionalCoupon.get());
+            storeResponseDto.setCouponDto(couponResponseDTO);
+        }
+         */
+
+        List<Coupon> optionalCoupon = couponRepository.findAllByMemberIdAndStoreId(memberId, store.getId());
+
+        if (!optionalCoupon.isEmpty()) {
+            MyPageCouponResponseDTO couponResponseDTO = CouponConverter.convertToMyCouponDto(optionalCoupon.get(0));
             storeResponseDto.setCouponDto(couponResponseDTO);
         }
 

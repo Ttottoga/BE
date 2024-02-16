@@ -22,9 +22,9 @@ public class MyPageReviewResponseDTO {
     private String reason;
     private MyPageStoreResponseDto storeDto;
 
-    public static MyPageReviewResponseDTO of(Review review, CouponRepository couponRepository) {
+    public static MyPageReviewResponseDTO of(Long memberId, Review review, CouponRepository couponRepository) {
         MyPageStoreResponseDto myPageStoreResponseDto =
-                StoreConverter.convertToMyStoreDto(review.getStore(), couponRepository);
+                StoreConverter.convertToMyStoreDto(memberId, review.getStore(), couponRepository);
 
         return MyPageReviewResponseDTO.builder()
                 .reviewId(review.getId())

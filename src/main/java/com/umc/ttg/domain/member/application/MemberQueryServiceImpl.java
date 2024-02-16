@@ -10,7 +10,6 @@ import com.umc.ttg.domain.review.dto.MyPageReviewResponseDTO;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +33,8 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
-        List<MyPageReviewResponseDTO> reviews = reviewRepository.findAllByMemberName(memberName)
-                .stream().map(review -> MyPageReviewResponseDTO.of(review, couponRepository))
+        List<MyPageReviewResponseDTO> reviews = reviewRepository.findAllByMemberId(member.getId())
+                .stream().map(review -> MyPageReviewResponseDTO.of(member.getId(), review, couponRepository))
                 .collect(Collectors.toList());
 
         MyPageAllResponseDto myPageDto = new MyPageAllResponseDto();

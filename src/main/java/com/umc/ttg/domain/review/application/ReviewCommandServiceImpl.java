@@ -11,6 +11,7 @@ import com.umc.ttg.domain.review.dto.ReviewRegisterRequestDTO;
 import com.umc.ttg.domain.review.dto.ReviewRegisterResponseDTO;
 import com.umc.ttg.domain.review.entity.Review;
 import com.umc.ttg.domain.review.entity.ReviewStatus;
+import com.umc.ttg.domain.review.exception.handler.ReviewHandler;
 import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
@@ -19,7 +20,6 @@ import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
 import com.umc.ttg.global.util.AwsS3Service;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,12 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
         Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
+
+        // 리뷰가 이미 있으면 예외 처리
+        Optional<Review> foundReview = reviewRepository.findByStoreIdAndMemberId(storeId, member.getId());
+        if (foundReview.isPresent()){
+            throw new ReviewHandler(ResponseCode.REVIEW_ALREADY_FOUND);
+        }
 
         Review review = new Review(store, member, reviewRegisterRequestDTO);
         review.setStatus(ReviewStatus.SUCCESS);
