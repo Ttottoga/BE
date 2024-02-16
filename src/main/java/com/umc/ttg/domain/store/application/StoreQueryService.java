@@ -16,4 +16,6 @@ public interface StoreQueryService {
 
     BaseResponseDto<Page<StoreResultResponseDto>> searchStore(String keyword, int page, int size, String memberName);
 
+    BaseResponseDto<Page<StoreResultResponseDto>> getHeartStores(int page, int size, String memberName);
+
 }
