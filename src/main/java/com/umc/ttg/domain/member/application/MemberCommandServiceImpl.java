@@ -28,12 +28,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Override
     @Transactional
-    public BaseResponseDto<MemberImageResponseDTO> updateImage(MemberImageRequestDTO memberImageRequestDTO) throws IOException {
+    public BaseResponseDto<MemberImageResponseDTO> updateImage(MemberImageRequestDTO memberImageRequestDTO, String memberName) throws IOException {
 
-        // 로그인 구현되면 시큐리티에서 member 가져올 예정
-        Long memberId = 1L;
-
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         if (!CheckFileExtension(memberImageRequestDTO)) {

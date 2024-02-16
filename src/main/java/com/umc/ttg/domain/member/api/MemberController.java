@@ -27,16 +27,21 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/profile")
-    public BaseResponseDto<MyPageAllResponseDto> getMyPage() {
+    public BaseResponseDto<MyPageAllResponseDto> getMyPage(HttpServletRequest request) {
 
-        return memberQueryService.myPageLookUp();
+        String memberName = memberService.retrieveName(request);
+
+        return memberQueryService.myPageLookUp(memberName);
     }
 
     @PostMapping("/profile/image")
     public BaseResponseDto<MemberImageResponseDTO> modifyProfileImage
-            (@ModelAttribute @Valid MemberImageRequestDTO memberImageRequestDTO) throws IOException {
+            (@ModelAttribute @Valid MemberImageRequestDTO memberImageRequestDTO,
+             HttpServletRequest request) throws IOException {
 
-        return memberCommandService.updateImage(memberImageRequestDTO);
+        String memberName = memberService.retrieveName(request);
+
+        return memberCommandService.updateImage(memberImageRequestDTO, memberName);
     }
 
     @GetMapping

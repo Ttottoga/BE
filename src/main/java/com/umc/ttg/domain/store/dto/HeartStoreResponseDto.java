@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 public class HeartStoreResponseDto {
 
     Long id;
+    Long memberId;
+    Long storeId;
 }

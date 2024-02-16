@@ -99,12 +99,9 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
     }
 
-    public BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId) {
+    public BaseResponseDto<HeartStoreResponseDto> insertHeart(Long storeId, String memberName) {
 
-        // 임시
-        Long memberId = 1L;
-
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Store store = storeRepository.findById(storeId)
@@ -121,18 +118,15 @@ public class StoreCommandServiceImpl implements StoreCommandService {
 
         HeartStore savedHeartStore = heartStoreRepository.save(heartStore);
 
-        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(savedHeartStore.getId());
+        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(savedHeartStore.getId(), member.getId(), store.getId());
 
         return BaseResponseDto.onSuccess(heartStoreResponseDto, ResponseCode.OK);
     }
 
     @Override
-    public BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId) {
+    public BaseResponseDto<HeartStoreResponseDto> deleteHeart(Long storeId, String memberName) {
 
-        // 임시
-        Long memberId = 1L;
-
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByName(memberName)
                 .orElseThrow(() -> new MemberHandler(ResponseCode.MEMBER_NOT_FOUND));
 
         Store store = storeRepository.findById(storeId)
@@ -141,7 +135,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         HeartStore heartStore = heartStoreRepository.findByMemberAndStore(member, store)
                 .orElseThrow(() -> new StoreHandler(ResponseCode.NOT_HEART_EXCEPTION));
 
-        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(heartStore.getId());
+        HeartStoreResponseDto heartStoreResponseDto = new HeartStoreResponseDto(heartStore.getId(), member.getId(), store.getId());
 
         heartStoreRepository.delete(heartStore);
 
