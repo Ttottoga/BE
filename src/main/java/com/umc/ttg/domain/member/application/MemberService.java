@@ -10,5 +10,6 @@ public interface MemberService {
     public Member findMemberByName(String name);
     public String retrieveName(HttpServletRequest request);
     String permitAllAccess(HttpServletRequest request);
+    Long permitMemberOnly(HttpServletRequest request);
 
 }
