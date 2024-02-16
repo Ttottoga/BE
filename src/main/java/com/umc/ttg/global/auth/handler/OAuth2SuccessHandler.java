@@ -55,7 +55,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         response.addHeader("Set-Cookie", responseCookie.toString());
 //        response.addCookie(cookie);
-        response.sendRedirect("http://localhost:3000/auth/oauth-response/");
+        response.sendRedirect("http://localhost:3000/auth/oauth-response/" + accessToken);
     }
 
 }
