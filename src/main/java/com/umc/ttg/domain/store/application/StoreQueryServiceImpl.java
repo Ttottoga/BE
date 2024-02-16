@@ -150,9 +150,9 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     private Page<StoreResultResponseDto> getPagingHeartStores(Member member, Pageable pageable) {
 
-        List<StoreResultResponseDto> heartStores = heartStoreRepository.findByMember(member)
+        List<StoreResultResponseDto> heartStores = heartStoreRepository.findByMember(member).stream()
                 .map(HeartStore::getStore)
-                .stream().sorted(comparator())
+                .sorted(comparator())
                 .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
                         store.getImage(), store.getServiceInfo(), store.getReviewCount(), true)).toList();
 
