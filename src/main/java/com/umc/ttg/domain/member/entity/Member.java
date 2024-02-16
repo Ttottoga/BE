@@ -6,8 +6,7 @@ import lombok.*;
 
 @Getter @Setter
 @Entity
-@NoArgsConstructor
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends Time {
 
     @Id
@@ -59,4 +58,9 @@ public class Member extends Time {
         this.type = type;
         this.role = "ROLE_USER";
     }
+
+    public void updateBenefitCount() {
+        this.benefitCount += 1;
+    }
+
 }

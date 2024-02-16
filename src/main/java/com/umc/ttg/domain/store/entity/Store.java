@@ -97,4 +97,8 @@ public class Store extends Time {
         this.image = storeImage;
     }
 
+    public void updateReviewCount() {
+        this.reviewCount += 1;
+    }
+
 }

@@ -71,6 +71,8 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         String s3ImageLink = getS3ImageLink(qrCode);
         couponRepository.save(Coupon.of(store, s3ImageLink, LocalDate.now(), LocalDate.now().plusMonths(1), member));
 
+        store.updateReviewCount();
+
         return BaseResponseDto.onSuccess(reviewRegisterResponseDTO, ResponseCode.OK);
     }
 

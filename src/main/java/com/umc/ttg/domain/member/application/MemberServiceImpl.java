@@ -2,6 +2,7 @@ package com.umc.ttg.domain.member.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.umc.ttg.domain.coupon.exception.handler.CouponHandler;
 import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.exception.handler.MemberHandler;
 import com.umc.ttg.domain.member.repository.MemberRepository;
@@ -65,6 +66,13 @@ public class MemberServiceImpl implements MemberService{
         if(!StringUtils.hasText(authorization)) return null;
 
         return retrieveName(request);
+    }
+
+    public Long permitMemberOnly(HttpServletRequest request) {
+        String name = request.getUserPrincipal().getName();
+        Member member = memberRepository.findByName(name)
+                .orElseThrow(() -> new CouponHandler(ResponseCode.MEMBER_NOT_FOUND));
+        return member.getId();
     }
 
     private String tokenPrefixNaver(String accessToken) {
