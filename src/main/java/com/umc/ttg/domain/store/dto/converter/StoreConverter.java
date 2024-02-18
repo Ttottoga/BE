@@ -42,10 +42,10 @@ public class StoreConverter {
 
     }
 
-    // 리뷰 타이틀 -> {Member 닉네임}'님의 닉네임'
+    // 리뷰 타이틀 -> {Member 닉네임}'님의 또또가 리뷰'
     public static String convertToReviewTitle(Review review) {
 
-        return review.getMember().getNickname() + " 님의 닉네임";
+        return review.getMember().getNickname() + " 님의 또또가 리뷰";
 
     }
 
