@@ -53,10 +53,10 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     public BaseResponseDto<StoreResponseDto> saveStore(StoreRequestDto storeRequestDto) throws IOException {
 
         Menu menu = menuRepository.findById(storeRequestDto.getMenu())
-                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+                .orElseThrow(() -> new StoreHandler(ResponseCode.MENU_NOT_FOUND));
 
         Region region = regionRepository.findById(storeRequestDto.getRegion())
-                .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
+                .orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
 
         Store store = Store.builder()
                 .storeRequestDto(storeRequestDto)
