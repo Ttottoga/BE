@@ -41,7 +41,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
         memberRepository.save(member);
 
-        MemberImageResponseDTO memberImageResponseDTO = new MemberImageResponseDTO(member.getId());
+        MemberImageResponseDTO memberImageResponseDTO = new MemberImageResponseDTO(member.getId(), member.getProfileImage());
 
         return BaseResponseDto.onSuccess(memberImageResponseDTO, ResponseCode.OK);
     }

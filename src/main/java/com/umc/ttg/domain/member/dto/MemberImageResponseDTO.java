@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class MemberImageResponseDTO {
 
     private Long memberId;
+    private String profileImage;
 }
