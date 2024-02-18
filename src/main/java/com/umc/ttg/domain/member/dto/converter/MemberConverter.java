@@ -11,6 +11,7 @@ public class MemberConverter {
                 .memberId(member.getId())
                 .nickname(member.getNickname())
                 .benefitCount(member.getBenefitCount())
+                .profileImage(member.getProfileImage())
                 .build();
     }
 }

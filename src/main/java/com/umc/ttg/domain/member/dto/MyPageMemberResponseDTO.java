@@ -14,4 +14,5 @@ public class MyPageMemberResponseDTO {
     private Long memberId;
     private String nickname;
     private int benefitCount;
+    private String profileImage;
 }
