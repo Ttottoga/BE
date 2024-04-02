@@ -15,7 +15,7 @@ public class StoreFindResponseDto {
     private String title;
     private String name;
     private String subTitle;
-    private String regionName;
+    private String schoolName;
     private String menuName;
     private String serviceInfo;
     private int reviewSpan;

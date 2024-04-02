@@ -55,7 +55,7 @@ public class StoreConverter {
                 .storeImage(store.getImage())
                 .title(store.getTitle())
                 .subTitle(store.getSubTitle())
-                .regionName(store.getRegion().getName())
+                .schoolName(store.getSchool().getName())
                 .menuName(store.getMenu().getName())
                 .serviceInfo(store.getServiceInfo())
                 .reviewSpan(store.getReviewSpan())

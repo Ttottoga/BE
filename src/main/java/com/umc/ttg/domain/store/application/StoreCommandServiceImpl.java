@@ -5,16 +5,14 @@ import com.umc.ttg.domain.member.entity.Member;
 import com.umc.ttg.domain.member.exception.handler.MemberHandler;
 import com.umc.ttg.domain.member.repository.HeartStoreRepository;
 import com.umc.ttg.domain.member.repository.MemberRepository;
-import com.umc.ttg.domain.review.entity.Review;
-import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.dto.*;
+import com.umc.ttg.domain.store.entity.School;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Menu;
-import com.umc.ttg.domain.store.entity.Region;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.domain.store.repository.MenuRepository;
-import com.umc.ttg.domain.store.repository.RegionRepository;
+import com.umc.ttg.domain.store.repository.SchoolRepository;
 import com.umc.ttg.domain.store.repository.StoreRepository;
 import com.umc.ttg.global.common.AwsS3;
 import com.umc.ttg.global.common.BaseResponseDto;
@@ -22,19 +20,11 @@ import com.umc.ttg.global.common.ResponseCode;
 import com.umc.ttg.global.util.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,7 +34,7 @@ public class StoreCommandServiceImpl implements StoreCommandService {
     private final AwsS3Service awsS3Service;
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
-    private final RegionRepository regionRepository;
+    private final SchoolRepository schoolRepository;
     private final MemberRepository memberRepository;
     private final HeartStoreRepository heartStoreRepository;
 
@@ -55,13 +45,13 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Menu menu = menuRepository.findById(storeRequestDto.getMenu())
                 .orElseThrow(() -> new StoreHandler(ResponseCode.MENU_NOT_FOUND));
 
-        Region region = regionRepository.findById(storeRequestDto.getRegion())
-                .orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
+        School school = schoolRepository.findById(storeRequestDto.getSchool())
+                .orElseThrow(() -> new StoreHandler(ResponseCode.SCHOOL_NOT_FOUND));
 
         Store store = Store.builder()
                 .storeRequestDto(storeRequestDto)
                 .menu(menu)
-                .region(region)
+                .school(school)
                 .storeImage(getS3ImageLink(storeRequestDto.getStoreImage())).build();
 
         Store savedStore = storeRepository.save(store);
@@ -90,10 +80,10 @@ public class StoreCommandServiceImpl implements StoreCommandService {
         Menu menu = menuRepository.findById(storeRequestDto.getMenu())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        Region region = regionRepository.findById(storeRequestDto.getRegion())
+        School school = schoolRepository.findById(storeRequestDto.getSchool())
                 .orElseThrow(() -> new StoreHandler(ResponseCode._BAD_REQUEST));
 
-        store.update(storeRequestDto, menu, region, getS3ImageLink(storeRequestDto.getStoreImage()));
+        store.update(storeRequestDto, menu, school, getS3ImageLink(storeRequestDto.getStoreImage()));
 
         return BaseResponseDto.onSuccess(StoreConverter.convertToStoreResponse(store.getId()), ResponseCode.OK);
 

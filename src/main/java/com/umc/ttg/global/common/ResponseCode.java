@@ -52,8 +52,8 @@ public enum ResponseCode {
     // Menu Error
     MENU_NOT_FOUND(HttpStatus.BAD_REQUEST, "MENU4001", "카테고리에 없는 메뉴입니다."),
 
-    // Region Error
-    REGION_NOT_FOUND(HttpStatus.BAD_REQUEST, "REGION4001", "카테고리에 없는 지역입니다."),
+    // School Error
+    SCHOOL_NOT_FOUND(HttpStatus.BAD_REQUEST, "SCHOOL4001", "카테고리에 없는 학교입니다."),
 
     // Article Error
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),

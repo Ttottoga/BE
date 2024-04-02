@@ -9,11 +9,11 @@ import com.umc.ttg.domain.review.repository.ReviewRepository;
 import com.umc.ttg.domain.store.dto.*;
 import com.umc.ttg.domain.store.dto.converter.StoreConverter;
 import com.umc.ttg.domain.store.entity.Menu;
-import com.umc.ttg.domain.store.entity.Region;
+import com.umc.ttg.domain.store.entity.School;
 import com.umc.ttg.domain.store.entity.Store;
 import com.umc.ttg.domain.store.exception.handler.StoreHandler;
 import com.umc.ttg.domain.store.repository.MenuRepository;
-import com.umc.ttg.domain.store.repository.RegionRepository;
+import com.umc.ttg.domain.store.repository.SchoolRepository;
 import com.umc.ttg.domain.store.repository.StoreRepository;
 import com.umc.ttg.global.common.BaseResponseDto;
 import com.umc.ttg.global.common.ResponseCode;
@@ -32,7 +32,7 @@ public class StoreQueryServiceImpl implements StoreQueryService {
 
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
-    private final RegionRepository regionRepository;
+    private final SchoolRepository schoolRepository;
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final HeartStoreRepository heartStoreRepository;
@@ -57,23 +57,23 @@ public class StoreQueryServiceImpl implements StoreQueryService {
      * 한 번의 요청마다 20개씩 넘겨줌(무한 스크롤 방식)
      */
     @Override
-    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, String memberName) {
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreBySchool(Long schoolId, int page, int size, String memberName) {
 
         validatePageAndSize(page, size);
 
         Member member = validateCorrectMember(memberName);
-        Region region = regionRepository.findById(regionId).orElseThrow(() -> new StoreHandler(ResponseCode.REGION_NOT_FOUND));
+        School school = schoolRepository.findById(schoolId).orElseThrow(() -> new StoreHandler(ResponseCode.SCHOOL_NOT_FOUND));
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return BaseResponseDto.onSuccess(getStoresByRegion(region, member, pageable), ResponseCode.OK);
+        return BaseResponseDto.onSuccess(getStoresBySchool(school, member, pageable), ResponseCode.OK);
 
     }
 
-    private Page<StoreResultResponseDto> getStoresByRegion(Region region, Member member, Pageable pageable) {
+    private Page<StoreResultResponseDto> getStoresBySchool(School school, Member member, Pageable pageable) {
 
         List<StoreResultResponseDto> stores =
-                storeRepository.findByRegion(region).stream()
+                storeRepository.findBySchool(school).stream()
                         .sorted(comparator())
                         .map(store -> new StoreResultResponseDto(store.getId(), store.getTitle(),
                                 store.getImage(), store.getServiceInfo(), store.getReviewCount(),

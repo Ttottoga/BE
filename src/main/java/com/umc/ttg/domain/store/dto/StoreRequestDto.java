@@ -21,7 +21,7 @@ public class StoreRequestDto {
     private String subTitle;
 
     @NotNull
-    private Long region;
+    private Long school;
 
     @NotNull
     private Long menu;

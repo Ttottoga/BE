@@ -5,16 +5,14 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Region {
+public class School {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String name;
-
-    private Long upperId;
 
 }

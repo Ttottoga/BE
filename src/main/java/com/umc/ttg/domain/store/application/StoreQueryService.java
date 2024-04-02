@@ -10,7 +10,7 @@ public interface StoreQueryService {
 
     BaseResponseDto<HomeResponseDto> getHome(String memberName);
 
-    BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(Long regionId, int page, int size, String memberName);
+    BaseResponseDto<Page<StoreResultResponseDto>> findStoreBySchool(Long schoolId, int page, int size, String memberName);
 
     BaseResponseDto<Page<StoreResultResponseDto>> findStoreByMenu(Long menuId, int page, int size, String memberName);
 

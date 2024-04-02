@@ -55,15 +55,15 @@ public class Store extends Time {
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
-    private Region region;
+    @JoinColumn(name = "school_id")
+    private School school;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
     @Builder
-    private Store(StoreRequestDto storeRequestDto, Menu menu, Region region, String storeImage) {
+    private Store(StoreRequestDto storeRequestDto, Menu menu, School school, String storeImage) {
 
         this.title = storeRequestDto.getTitle();
         this.subTitle = storeRequestDto.getSubTitle();
@@ -76,12 +76,12 @@ public class Store extends Time {
         this.address = storeRequestDto.getAddress();
         this.name = storeRequestDto.getName();
         this.menu = menu;
-        this.region = region;
+        this.school = school;
         this.image = storeImage;
 
     }
 
-    public void update(StoreRequestDto storeRequestDto, Menu menu, Region region, String storeImage) {
+    public void update(StoreRequestDto storeRequestDto, Menu menu, School school, String storeImage) {
         this.title = storeRequestDto.getTitle();
         this.subTitle = storeRequestDto.getSubTitle();
         this.useInfo = storeRequestDto.getUseInfo();
@@ -93,7 +93,7 @@ public class Store extends Time {
         this.address = storeRequestDto.getAddress();
         this.name = storeRequestDto.getName();
         this.menu = menu;
-        this.region = region;
+        this.school = school;
         this.image = storeImage;
     }
 

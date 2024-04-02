@@ -48,11 +48,11 @@ public class StoreController {
 
     /**
      * 정렬 기준 X : 무조건 베스트순이므로(내림차순)
-     * @param regionId default 1L(지역>전체)
+     * @param schoolId default 1L(지역>전체)
      * @return
      */
-    @GetMapping("/region-categories")
-    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreByRegion(@RequestParam Optional<Long> regionId,
+    @GetMapping("/school-categories")
+    public BaseResponseDto<Page<StoreResultResponseDto>> findStoreBySchool(@RequestParam Optional<Long> schoolId,
                                                                                  @RequestParam Optional<Integer> page,
                                                                                  @RequestParam Optional<Integer> size, HttpServletRequest request) {
 
@@ -62,7 +62,7 @@ public class StoreController {
          */
         String memberName = memberService.permitAllAccess(request);
 
-        return storeQueryService.findStoreByRegion(regionId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
+        return storeQueryService.findStoreBySchool(schoolId.orElse(1L), page.orElse(0), size.orElse(20), memberName);
 
     }
 
