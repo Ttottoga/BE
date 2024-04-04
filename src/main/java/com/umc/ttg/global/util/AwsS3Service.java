@@ -10,6 +10,7 @@ import com.umc.ttg.global.error.handler.AwsS3Handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -66,7 +67,13 @@ public class AwsS3Service {
     }
 
     public Optional<File> convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+
         File file = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
+
+        // 이미 파일이 있을 시에, 성공적인 파일 생성을 위해 삭제
+        if(file.exists()) {
+            FileSystemUtils.deleteRecursively(file);
+        }
 
         if(file.createNewFile()) {
             try(FileOutputStream fos = new FileOutputStream(file)) {
@@ -74,6 +81,7 @@ public class AwsS3Service {
             }
             return Optional.of(file);
         }
+
         return Optional.empty();
     }
 
