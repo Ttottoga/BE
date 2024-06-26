@@ -2,8 +2,10 @@ package com.umc.ttg.domain.store.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class Menu {
 
@@ -14,5 +16,9 @@ public class Menu {
 
     @Column(nullable = false, length = 20)
     private String name;
+
+    public Menu(String name) {
+        this.name = name;
+    }
 
 }

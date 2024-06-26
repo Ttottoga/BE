@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 public class StoreRequestDto {
 
