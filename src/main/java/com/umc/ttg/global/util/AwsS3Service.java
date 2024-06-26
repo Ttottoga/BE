@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AwsS3Service {
+public class AwsS3Service implements FileService {
 
     private final AmazonS3 amazonS3;
 
@@ -33,6 +33,15 @@ public class AwsS3Service {
                 .orElseThrow(() -> new AwsS3Handler(ResponseCode.S3_UPLOAD_FAIL));
 
         return upload(file, directoryName);
+    }
+
+    public void remove(Object object) {
+        AwsS3 awsS3 = (AwsS3)object;
+
+        if (!amazonS3.doesObjectExist(bucket, awsS3.getKey())) {
+            throw new AmazonS3Exception("Object " + awsS3.getKey() + " does not exist!");
+        }
+        amazonS3.deleteObject(bucket, awsS3.getKey());
     }
 
     private AwsS3 upload(File file, String directoryName) {
@@ -66,7 +75,7 @@ public class AwsS3Service {
         file.delete();
     }
 
-    public Optional<File> convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+    private Optional<File> convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
 
         File file = new File(System.getProperty("user.dir") + "/" + multipartFile.getOriginalFilename());
 
@@ -85,10 +94,5 @@ public class AwsS3Service {
         return Optional.empty();
     }
 
-    public void remove(AwsS3 awsS3) {
-        if (!amazonS3.doesObjectExist(bucket, awsS3.getKey())) {
-            throw new AmazonS3Exception("Object " + awsS3.getKey() + " does not exist!");
-        }
-        amazonS3.deleteObject(bucket, awsS3.getKey());
-    }
+
 }
