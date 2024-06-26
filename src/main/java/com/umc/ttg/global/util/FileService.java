@@ -1,6 +1,5 @@
 package com.umc.ttg.global.util;
 
-import com.umc.ttg.global.common.AwsS3;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
