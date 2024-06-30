@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +46,6 @@ class StoreRepositoryTest {
                         .serviceInfo("serviceInfo")
                         .placeInfo("placeInfo")
                         .name("name")
-//                        .reviewSpan(1)
                         .sponInfo("sponInfo")
                         .address("address")
                         .school(1L)
@@ -73,15 +73,308 @@ class StoreRepositoryTest {
     }
 
     @Test
-    void findBySchool_학교이름으로_상점을_찾을_수_있다() {
+    void findBySchool_학교_객체로_해당하는_상점들을_찾을_수_있다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
 
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("title")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("name")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findBySchool(school);
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
     }
 
     @Test
-    void findByTitleContainingOrNameContaining() {
+    void findBySchool_학교_객체로_해당하는_상점이_없으면_빈_리스트를_반환한다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("title")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("name")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+        School fakeSchool = new School("덕성여대");
+        schoolRepository.save(fakeSchool);
+
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findBySchool(fakeSchool);
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(0);
     }
 
     @Test
-    void findByMenu() {
+    void findByTitleContainingOrNameContaining_제목과_이름으로_상점을_조회할_수_있다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("맛있는 중식 먹으러 오세요 ~")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("홍콩반점")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findByTitleContainingOrNameContaining("중식", "홍콩반점");
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    void findByTitleContainingOrNameContaining_검색어에_해당하는_상점이_없으면_빈_리스트를_반환한다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("맛있는 중식 먹으러 오세요 ~")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("홍콩반점")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findByTitleContainingOrNameContaining("일식", "네코스시");
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(0);
+    }
+
+    /**
+     * 이후에 띄어쓰기가 있어도 해당 키워드에 걸리도록 리팩터링 예정
+     */
+//    @Test
+//    void findByTitleContainingOrNameContaining_중간에_띄어쓰기가_있어도_해당_상점을_잘_반환한다() {
+//        // given
+//        MockMultipartFile mockMultipartFile
+//                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+//
+//        StoreRequestDto storeRequestDto =
+//                StoreRequestDto.builder()
+//                        .title("맛있는 중식 먹으러 오세요 ~")
+//                        .useInfo("userInfo")
+//                        .subTitle("subTitle")
+//                        .saleInfo("saleInfo")
+//                        .serviceInfo("serviceInfo")
+//                        .placeInfo("placeInfo")
+//                        .name("홍콩반점")
+//                        .sponInfo("sponInfo")
+//                        .address("address")
+//                        .school(1L)
+//                        .menu(1L)
+//                        .storeImage(mockMultipartFile).build();
+//
+//        // Menu, School 데이터 생성 및 저장
+//        Menu menu = new Menu("중식");
+//        menuRepository.save(menu);
+//        School school = new School("서울여대");
+//        schoolRepository.save(school);
+//
+//        Store store = Store.builder()
+//                .storeRequestDto(storeRequestDto)
+//                .storeImage("imagePath")
+//                .school(school)
+//                .menu(menu)
+//                .build();
+//        // when
+//        storeRepository.save(store);
+//        List<Store> result = storeRepository.findByTitleContainingOrNameContaining("중 식", "홍콩 반점");
+//
+//        // then
+//        assertThat(result.size()).isNotNull();
+//        assertThat(result.size()).isEqualTo(1);
+//    }
+
+
+    @Test
+    void findByMenu_메뉴_객체로_상점들을_조회할_수_있다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("맛있는 중식 먹으러 오세요 ~")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("홍콩반점")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findByMenu(menu);
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    void findByMenu_메뉴_객체로_해당하는_상점이_없으면_빈_리스트를_반환한다() {
+        // given
+        MockMultipartFile mockMultipartFile
+                = new MockMultipartFile("image", "test-image.png", "image/png", "imageBytes".getBytes());
+
+        StoreRequestDto storeRequestDto =
+                StoreRequestDto.builder()
+                        .title("맛있는 중식 먹으러 오세요 ~")
+                        .useInfo("userInfo")
+                        .subTitle("subTitle")
+                        .saleInfo("saleInfo")
+                        .serviceInfo("serviceInfo")
+                        .placeInfo("placeInfo")
+                        .name("홍콩반점")
+                        .sponInfo("sponInfo")
+                        .address("address")
+                        .school(1L)
+                        .menu(1L)
+                        .storeImage(mockMultipartFile).build();
+
+        // Menu, School 데이터 생성 및 저장
+        Menu menu = new Menu("중식");
+        menuRepository.save(menu);
+        Menu fakeMenu = new Menu("일식");
+        menuRepository.save(fakeMenu);
+        School school = new School("서울여대");
+        schoolRepository.save(school);
+
+        Store store = Store.builder()
+                .storeRequestDto(storeRequestDto)
+                .storeImage("imagePath")
+                .school(school)
+                .menu(menu)
+                .build();
+
+        // when
+        storeRepository.save(store);
+        List<Store> result = storeRepository.findByMenu(fakeMenu);
+
+        // then
+        assertThat(result.size()).isNotNull();
+        assertThat(result.size()).isEqualTo(0);
     }
 }
