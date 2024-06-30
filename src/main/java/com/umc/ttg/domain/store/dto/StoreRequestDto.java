@@ -32,8 +32,8 @@ public class StoreRequestDto {
 
     private String serviceInfo;
 
-    @NotNull
-    private Integer reviewSpan;
+//    @NotNull
+//    private Integer reviewSpan;
 
     private String useInfo;
 

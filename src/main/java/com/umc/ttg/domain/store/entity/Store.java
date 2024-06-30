@@ -49,6 +49,7 @@ public class Store extends Time {
     private int reviewCount;
 
     @Column(nullable = false)
+    @ColumnDefault("1")
     private int reviewSpan;
 
     @Column(nullable = false)
@@ -72,7 +73,6 @@ public class Store extends Time {
         this.placeInfo = storeRequestDto.getPlaceInfo();
         this.sponInfo = storeRequestDto.getSponInfo();
         this.serviceInfo = storeRequestDto.getServiceInfo();
-        this.reviewSpan = storeRequestDto.getReviewSpan();
         this.address = storeRequestDto.getAddress();
         this.name = storeRequestDto.getName();
         this.menu = menu;
@@ -89,7 +89,6 @@ public class Store extends Time {
         this.placeInfo = storeRequestDto.getPlaceInfo();
         this.sponInfo = storeRequestDto.getSponInfo();
         this.serviceInfo = storeRequestDto.getServiceInfo();
-        this.reviewSpan = storeRequestDto.getReviewSpan();
         this.address = storeRequestDto.getAddress();
         this.name = storeRequestDto.getName();
         this.menu = menu;
