@@ -28,5 +28,5 @@ INSERT INTO menu(id, name) VALUES (15, '회/초밥');
 INSERT INTO menu(id, name) VALUES (16, '샌드위치');
 
 -- 상점 데이터
-INSERT INTO store (name, title, sub_title, image, use_info, sale_info, place_info, spon_info, service_info, review_count, address, school_id, menu_id)
-VALUES ('둘쓰닭', '[강남] 둘이 먹다 하나가 쓰러진닭, 둘쓰닭', '콘치즈에 퐁당 빠진 통닭이 선보이는 맛을 즐겨보세요', '/images/image1', 'use_info', 'sale_info', 'place_info','spon_info', '사리 1종(당면/떡/치즈)', 0, 'address', 1, 1);
+INSERT INTO store (name, title, sub_title, image, use_info, sale_info, place_info, spon_info, service_info, address, school_id, menu_id)
+VALUES ('둘쓰닭', '[강남] 둘이 먹다 하나가 쓰러진닭, 둘쓰닭', '콘치즈에 퐁당 빠진 통닭이 선보이는 맛을 즐겨보세요', '/images/image1', 'use_info', 'sale_info', 'place_info','spon_info', '사리 1종(당면/떡/치즈)', 'address', 1, 1);

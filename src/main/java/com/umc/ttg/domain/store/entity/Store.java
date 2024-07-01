@@ -46,6 +46,7 @@ public class Store extends Time {
     private Character hotYn;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private int reviewCount;
 
     @Column(nullable = false)
